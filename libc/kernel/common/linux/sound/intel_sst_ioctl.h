@@ -97,7 +97,7 @@ struct snd_pcm_params_mrfld {
  __u16 reserved3;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u8 channel_map[8];
-} __packed;
+} __attribute__ ((packed));
 struct snd_pcm_params {
  __u16 codec;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
@@ -189,7 +189,7 @@ struct snd_ppp_params {
  __u8 reserved;
  __u32 size;
  void *params;
-} __packed;
+} __attribute__ ((packed));
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct snd_sst_postproc_info {
  __u32 src_min;
@@ -214,7 +214,7 @@ struct snd_sst_prp_info {
  __u8 volume_control;
  __u8 reserved1;
  __u16 reserved2;
-} __packed;
+} __attribute__ ((packed));
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct snd_sst_ppp_info {
  __u32 src:1;
@@ -261,7 +261,7 @@ union snd_sst_codec_params {
 struct snd_sst_stream_params {
  union snd_sst_codec_params uc;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-} __packed;
+} __attribute__ ((packed));
 struct snd_sst_params {
  __u32 result;
  __u32 stream_id;
@@ -291,7 +291,7 @@ struct snd_sst_pmic_config {
  __u16 num_chan;
  __u16 pcm_wd_sz;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-} __packed;
+} __attribute__ ((packed));
 struct snd_sst_get_stream_params {
  struct snd_sst_params codec_params;
  struct snd_sst_pmic_config pcm_params;
@@ -352,13 +352,13 @@ struct snd_sst_slot_info {
  __u8 reserved;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct snd_sst_pmic_config pcm_params;
-} __packed;
+} __attribute__ ((packed));
 #define SST_MAX_TARGET_DEVICES 3
 struct snd_sst_target_device {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u32 device_route;
  struct snd_sst_slot_info devices[SST_MAX_TARGET_DEVICES];
-} __packed;
+} __attribute__ ((packed));
 struct snd_sst_driver_info {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u32 version;
@@ -413,7 +413,7 @@ struct snd_sst_tuning_params {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u8 rsvd;
  __u64 addr;
-} __packed;
+} __attribute__ ((packed));
 struct snd_sst_runtime_params {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u8 type;
@@ -422,7 +422,7 @@ struct snd_sst_runtime_params {
  __u8 rsvd;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  void *addr;
-} __packed;
+} __attribute__ ((packed));
 #define SNDRV_SST_STREAM_SET_PARAMS _IOWR('L', 0x00,   struct snd_sst_stream_params *)
 #define SNDRV_SST_STREAM_GET_PARAMS _IOWR('L', 0x01,   struct snd_sst_get_stream_params *)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
