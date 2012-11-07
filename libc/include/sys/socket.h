@@ -167,6 +167,7 @@ struct ucred {
 #define AF_LLC 26
 #define AF_TIPC 30
 #define AF_BLUETOOTH 31
+#define AF_PHONET 35
 #define AF_CAIF 38
 #define AF_MAX 39
 
