@@ -125,7 +125,7 @@ static inline void init_front_guard(hdr_t* hdr) {
 
 static inline bool is_front_guard_valid(hdr_t* hdr) {
     for (size_t i = 0; i < FRONT_GUARD_LEN; i++) {
-        if (hdr->front_guard[i] != FRONT_GUARD) {
+        if (hdr->front_guard[i] != (char)FRONT_GUARD) {
             return 0;
         }
     }
@@ -143,7 +143,7 @@ static inline bool is_rear_guard_valid(hdr_t* hdr) {
     int first_mismatch = -1;
     ftr_t* ftr = to_ftr(hdr);
     for (i = 0; i < REAR_GUARD_LEN; i++) {
-        if (ftr->rear_guard[i] != REAR_GUARD) {
+        if (ftr->rear_guard[i] != (char)REAR_GUARD) {
             if (first_mismatch < 0)
                 first_mismatch = i;
             valid = 0;
@@ -211,7 +211,7 @@ static int was_used_after_free(hdr_t* hdr) {
     unsigned i;
     const char* data = reinterpret_cast<const char *>(user(hdr));
     for (i = 0; i < hdr->size; i++)
-        if (data[i] != FREE_POISON)
+        if (data[i] != (char)FREE_POISON)
             return 1;
     return 0;
 }
@@ -220,7 +220,7 @@ static int was_used_after_free(hdr_t* hdr) {
 static inline int check_guards(hdr_t* hdr, int* safe) {
     *safe = 1;
     if (!is_front_guard_valid(hdr)) {
-        if (hdr->front_guard[0] == FRONT_GUARD) {
+        if (hdr->front_guard[0] == (char)FRONT_GUARD) {
             log_message("+++ ALLOCATION %p SIZE %d HAS A CORRUPTED FRONT GUARD\n",
                        user(hdr), hdr->size);
         } else {
