@@ -220,9 +220,11 @@ static inline void fill_meta(hdr_t *hdr, size_t size)
 static inline void add(hdr_t *hdr) {
     if (hdr->tag == ALLOC_NONCHK_TAG)
         return;
+#ifdef ENABLE_MEM_LEAK_TRACKER
     ScopedPthreadMutexLocker locker(&lock);
     num++;
     add_locked(hdr, &tail, &head);
+#endif
 }
 
 static inline int del(hdr_t *hdr) {
@@ -232,9 +234,11 @@ static inline int del(hdr_t *hdr) {
         return -1;
     }
 
+#ifdef ENABLE_MEM_LEAK_TRACKER
     ScopedPthreadMutexLocker locker(&lock);
     del_locked(hdr, &tail, &head);
     num--;
+#endif
     return 0;
 }
 
