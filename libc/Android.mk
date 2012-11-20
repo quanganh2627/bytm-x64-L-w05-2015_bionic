@@ -10,7 +10,7 @@ libc_common_src_files := \
 	unistd/alarm.c \
 	unistd/brk.c \
 	unistd/daemon.c \
-	unistd/eventfd.c \
+	unistd/eventfd_c.c \
 	unistd/exec.c \
 	unistd/fcntl.c \
 	unistd/fnmatch.c \
