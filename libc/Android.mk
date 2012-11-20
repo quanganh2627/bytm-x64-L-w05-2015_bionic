@@ -298,6 +298,7 @@ libc_common_src_files := \
 	bionic/thread_atexit.c \
 	bionic/utime.c \
 	bionic/utmp.c \
+	bionic/fallocate.c \
 	netbsd/gethnamaddr.c \
 	netbsd/isc/ev_timers.c \
 	netbsd/isc/ev_streams.c \
