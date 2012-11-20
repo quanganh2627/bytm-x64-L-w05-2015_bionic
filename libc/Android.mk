@@ -152,6 +152,7 @@ libc_common_src_files := \
 	bionic/usleep.c \
 	bionic/utmp.c \
 	bionic/wcscoll.c \
+	bionic/fallocate.c \
 	netbsd/gethnamaddr.c \
 	netbsd/inet/nsap_addr.c \
 	netbsd/resolv/__dn_comp.c \
