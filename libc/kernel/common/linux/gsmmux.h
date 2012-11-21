@@ -36,7 +36,8 @@ struct gsm_config {
  unsigned int i;
  unsigned int clocal;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int unused[7];
+ unsigned int burst;
+ unsigned int unused[6];
 };
 #define GSMIOC_GETCONF _IOR('G', 0, struct gsm_config)
 #define GSMIOC_SETCONF _IOW('G', 1, struct gsm_config)
