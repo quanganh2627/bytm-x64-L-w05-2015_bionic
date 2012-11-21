@@ -16,38 +16,43 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef _MSM_RMNET_H_
-#define _MSM_RMNET_H_
-#define RMNET_MODE_NONE (0x00)
-#define RMNET_MODE_LLP_ETH (0x01)
+#ifndef __BC_VIDEO_LINUX_H__
+#define __BC_VIDEO_LINUX_H__
+#include <linux/ioctl.h>
+#define BC_FOURCC(a,b,c,d)   ((unsigned long) ((a) | (b)<<8 | (c)<<16 | (d)<<24))
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define RMNET_MODE_LLP_IP (0x02)
-#define RMNET_MODE_QOS (0x04)
-#define RMNET_MODE_MASK (RMNET_MODE_LLP_ETH |   RMNET_MODE_LLP_IP |   RMNET_MODE_QOS)
-#define RMNET_IS_MODE_QOS(mode)   ((mode & RMNET_MODE_QOS) == RMNET_MODE_QOS)
+#define BC_PIX_FMT_NV12 BC_FOURCC('N', 'V', '1', '2')  
+#define BC_PIX_FMT_UYVY BC_FOURCC('U', 'Y', 'V', 'Y')  
+#define BC_PIX_FMT_YUYV BC_FOURCC('Y', 'U', 'Y', 'V')  
+#define BC_PIX_FMT_RGB565 BC_FOURCC('R', 'G', 'B', 'P')  
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define RMNET_IS_MODE_IP(mode)   ((mode & RMNET_MODE_LLP_IP) == RMNET_MODE_LLP_IP)
-enum rmnet_ioctl_cmds_e {
- RMNET_IOCTL_SET_LLP_ETHERNET = 0x000089F1,
- RMNET_IOCTL_SET_LLP_IP = 0x000089F2,
+#define BC_PIX_FMT_YV12 BC_FOURCC('Y', 'V', '1', '2')  
+typedef struct BC_Video_ioctl_package_TAG {
+ int ioctl_cmd;
+ int device_id;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- RMNET_IOCTL_GET_LLP = 0x000089F3,
- RMNET_IOCTL_SET_QOS_ENABLE = 0x000089F4,
- RMNET_IOCTL_SET_QOS_DISABLE = 0x000089F5,
- RMNET_IOCTL_GET_QOS = 0x000089F6,
+ int inputparam;
+ int outputparam;
+} BC_Video_ioctl_package;
+typedef struct bc_buf_ptr {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- RMNET_IOCTL_GET_OPMODE = 0x000089F7,
- RMNET_IOCTL_OPEN = 0x000089F8,
- RMNET_IOCTL_CLOSE = 0x000089F9,
- RMNET_IOCTL_MAX
+ unsigned int index;
+ int size;
+ unsigned long pa;
+ unsigned long handle;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-};
-#define QMI_QOS_HDR_S __attribute((__packed__)) qmi_qos_hdr_s
-struct QMI_QOS_HDR_S {
- unsigned char version;
+} bc_buf_ptr_t;
+#define BC_Video_ioctl_fill_buffer 0
+#define BC_Video_ioctl_get_buffer_count 1
+#define BC_Video_ioctl_get_buffer_phyaddr 2  
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned char flags;
- unsigned long flow_id;
-};
+#define BC_Video_ioctl_get_buffer_index 3  
+#define BC_Video_ioctl_request_buffers 4
+#define BC_Video_ioctl_set_buffer_phyaddr 5
+#define BC_Video_ioctl_release_buffer_device 6
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define BC_Video_ioctl_alloc_buffer 7
+#define BC_Video_ioctl_free_buffer 8
+#define BC_Video_ioctl_get_buffer_handle 9
 #endif
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
