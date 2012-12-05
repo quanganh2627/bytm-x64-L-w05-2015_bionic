@@ -694,6 +694,16 @@ struct drm_psb_register_rw_arg {
  } sprite;
  uint32_t subpicture_enable_mask;
  uint32_t subpicture_disable_mask;
+ struct {
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t CursorADDR;
+ uint32_t xPos;
+ uint32_t yPos;
+ uint32_t CursorSize;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ } cursor;
+ uint32_t cursor_enable_mask;
+ uint32_t cursor_disable_mask;
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 enum {
