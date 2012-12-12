@@ -201,6 +201,7 @@ struct ucred {
 #define PF_LLC AF_LLC
 #define PF_TIPC AF_TIPC
 #define PF_BLUETOOTH AF_BLUETOOTH
+#define PF_PHONET AF_PHONET
 #define PF_CAIF AF_CAIF
 #define PF_MAX AF_MAX
 
