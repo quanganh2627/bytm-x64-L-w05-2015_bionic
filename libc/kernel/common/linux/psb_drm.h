@@ -44,6 +44,17 @@
 #define DRM_PSB_FLAG_MEM_MMU_TILING TTM_PL_FLAG_PRIV3
 typedef int32_t psb_fixed;
 typedef uint32_t psb_ufixed;
+
+static inline int32_t psb_int_to_fixed(int a)
+{
+ return a * (1 << PSB_FIXED_SHIFT);
+}
+
+static inline uint32_t psb_unsigned_to_ufixed(unsigned int a)
+{
+ return a << PSB_FIXED_SHIFT;
+}
+
 typedef enum {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  DRM_CMD_SUCCESS,
@@ -805,13 +816,17 @@ typedef struct drm_psb_msvdx_decode_status {
 #define DRM_PSB_ENABLE_IED_SESSION 0x30
 #define DRM_PSB_DISABLE_IED_SESSION 0x31
 #define DRM_PSB_VSYNC_SET 0x32
+/* HDCP */
+#define DRM_PSB_HDCP_DISPLAY_IED_OFF        0x33
+#define DRM_PSB_HDCP_DISPLAY_IED_ON         0x34
+#define DRM_PSB_QUERY_HDCP_DISPLAY_IED_CAPS 0x35
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DRM_OEM_RESERVED_START 0x40
 #define DRM_OEM_RESERVED_END 0x4F
 #define DRM_PSB_TTM_START 0x50
 #define DRM_PSB_TTM_END 0x5F
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#ifdef PDUMP
+#if defined(PDUMP)
 #define DRM_PSB_CMDBUF (PVR_DRM_DBGDRV_CMD + 1)
 #else
 #define DRM_PSB_CMDBUF (DRM_PSB_TTM_START)
