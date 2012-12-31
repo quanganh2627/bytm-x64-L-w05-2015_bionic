@@ -374,7 +374,7 @@ libc_common_src_files += \
 	string/memmove.c.arm \
 	string/bcopy.c \
 	string/strncmp.c \
-	unistd/socketcalls.c
+	unistd/socketcalls.c \
 	string/strcat.c \
 	string/strncat.c \
 	string/strncpy.c \
