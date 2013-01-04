@@ -45,7 +45,7 @@ char* getcwd(char* buf, size_t size) {
     if (size == 0) {
       // The Linux kernel won't return more than a page, so translate size 0 to 4KiB.
       // TODO: if we need to support paths longer than that, we'll have to walk the tree ourselves.
-      size = getpagesize();
+      allocated_size = size = getpagesize();
     }
     buf = allocated_buf = static_cast<char*>(malloc(allocated_size));
     if (buf == NULL) {
