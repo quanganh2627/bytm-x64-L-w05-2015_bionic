@@ -168,8 +168,12 @@ struct ucred {
 #define AF_TIPC 30
 #define AF_BLUETOOTH 31
 #define AF_PHONET 35
-#define AF_CAIF 38
-#define AF_MAX 39
+#define AF_IEEE802154 36
+#define AF_CAIF 37
+#define AF_ALG 38
+#define AF_MHI 39
+#define AF_RAW 40
+#define AF_MAX 41
 
 #define PF_UNSPEC AF_UNSPEC
 #define PF_UNIX AF_UNIX
@@ -202,7 +206,11 @@ struct ucred {
 #define PF_TIPC AF_TIPC
 #define PF_BLUETOOTH AF_BLUETOOTH
 #define PF_PHONET AF_PHONET
+#define PF_IEEE802154 AF_IEEE802154
 #define PF_CAIF AF_CAIF
+#define PF_ALG AF_ALG
+#define PF_MHI AF_MHI
+#define PF_RAW AF_RAW
 #define PF_MAX AF_MAX
 
 #define SOMAXCONN 128
