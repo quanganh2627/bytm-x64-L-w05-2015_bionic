@@ -171,9 +171,10 @@ struct ucred {
 #define AF_IEEE802154 36
 #define AF_CAIF 37
 #define AF_ALG 38
-#define AF_MHI 39
-#define AF_RAW 40
-#define AF_MAX 41
+#define AF_NFC 39
+#define AF_MHI 139
+#define AF_RAW 140
+#define AF_MAX 141
 
 #define PF_UNSPEC AF_UNSPEC
 #define PF_UNIX AF_UNIX
