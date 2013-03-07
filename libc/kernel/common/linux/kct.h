@@ -43,6 +43,7 @@ struct ct_event {
 	enum ct_ev_type type;
 	__u64 timestamp;
 	__u32 attchmt_size; /* sizeof(all_attachments inc. padding) */
+	__u32 flags;
 	struct ct_attchmt attachments[];
 }  __aligned(4);
 
