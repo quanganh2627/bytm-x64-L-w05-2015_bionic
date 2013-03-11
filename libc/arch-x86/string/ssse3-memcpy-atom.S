@@ -28,8 +28,15 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "cache.h"
+#undef __i686
+
+#ifndef USE_AS_MEMMOVE
+# define USE_AS_MEMMOVE 1
+#endif
+
 #ifndef MEMCPY
-# define MEMCPY	ssse3_memcpy5
+# define MEMCPY	memcpy
 #endif
 
 #ifndef L

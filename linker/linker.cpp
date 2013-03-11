@@ -51,7 +51,7 @@
 #include "linker_phdr.h"
 
 #define ALLOW_SYMBOLS_FROM_MAIN 1
-#define SO_MAX 128
+#define SO_MAX 256
 
 /* Assume average path length of 64 and max 8 paths */
 #define LDPATH_BUFSIZE 512
@@ -1909,6 +1909,13 @@ sanitize:
         write(2, errmsg, sizeof(errmsg));
         exit(-1);
     }
+
+    /* After the link_image, the si->load_bias is initialized.
+     * For so lib, the map->l_addr will be updated in notify_gdb_of_load.
+     * We need to update this value for so exe here. So Unwind for some arch
+     * like x86 could work correctly within so exe.
+     */
+    map->l_addr = si->load_bias;
 
     soinfo_call_preinit_constructors(si);
 

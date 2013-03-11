@@ -59,6 +59,7 @@ extern unsigned int malloc_double_free_backlog;
 
 #define MAX_BACKTRACE_DEPTH 15
 #define ALLOCATION_TAG      0x1ee7d00d
+#define ALLOC_NONCHK_TAG    0xd9a69b0b
 #define BACKLOG_TAG         0xbabecafe
 #define FREE_POISON         0xa5
 #define BACKLOG_DEFAULT_LEN 100
@@ -68,19 +69,15 @@ extern unsigned int malloc_double_free_backlog;
 #define REAR_GUARD_LEN      (1<<5)
 
 static void log_message(const char* format, ...) {
-    extern const MallocDebug __libc_malloc_default_dispatch;
-    extern const MallocDebug* __libc_malloc_dispatch;
-    extern pthread_mutex_t gAllocationsMutex;
-
-    va_list args;
-    {
-        ScopedPthreadMutexLocker locker(&gAllocationsMutex);
-        const MallocDebug* current_dispatch = __libc_malloc_dispatch;
-        __libc_malloc_dispatch = &__libc_malloc_default_dispatch;
+    int state;
+    pthread_attr_getinlogmsg(&state);
+    if (state == PTHREAD_OUT_LOGMSG) {
+        pthread_attr_setinlogmsg(PTHREAD_IN_LOGMSG);
+        va_list args;
         va_start(args, format);
         __libc_android_log_vprint(ANDROID_LOG_ERROR, "libc", format, args);
         va_end(args);
-        __libc_malloc_dispatch = current_dispatch;
+        pthread_attr_setinlogmsg(PTHREAD_OUT_LOGMSG);
     }
 }
 
@@ -150,7 +147,7 @@ static inline void init_front_guard(hdr_t *hdr) {
 
 static inline bool is_front_guard_valid(hdr_t *hdr) {
     for (size_t i = 0; i < FRONT_GUARD_LEN; i++) {
-        if (hdr->front_guard[i] != FRONT_GUARD) {
+        if (hdr->front_guard[i] != (char)FRONT_GUARD) {
             return 0;
         }
     }
@@ -168,7 +165,7 @@ static inline bool is_rear_guard_valid(hdr_t *hdr) {
     int first_mismatch = -1;
     ftr_t* ftr = to_ftr(hdr);
     for (i = 0; i < REAR_GUARD_LEN; i++) {
-        if (ftr->rear_guard[i] != REAR_GUARD) {
+        if (ftr->rear_guard[i] != (char)REAR_GUARD) {
             if (first_mismatch < 0)
                 first_mismatch = i;
             valid = 0;
@@ -207,24 +204,41 @@ static inline int del_locked(hdr_t *hdr, hdr_t **tail, hdr_t **head) {
     return 0;
 }
 
-static inline void add(hdr_t *hdr, size_t size) {
-    ScopedPthreadMutexLocker locker(&lock);
-    hdr->tag = ALLOCATION_TAG;
+static inline void fill_meta(hdr_t *hdr, size_t size)
+{
+    int state;
+    pthread_attr_getinlogmsg(&state);
+    if (state == PTHREAD_IN_LOGMSG)
+        hdr->tag = ALLOC_NONCHK_TAG;
+    else
+        hdr->tag = ALLOCATION_TAG;
     hdr->size = size;
     init_front_guard(hdr);
     init_rear_guard(hdr);
+}
+
+static inline void add(hdr_t *hdr) {
+    if (hdr->tag == ALLOC_NONCHK_TAG)
+        return;
+#ifdef ENABLE_MEM_LEAK_TRACKER
+    ScopedPthreadMutexLocker locker(&lock);
     num++;
     add_locked(hdr, &tail, &head);
+#endif
 }
 
 static inline int del(hdr_t *hdr) {
+    if (hdr->tag == ALLOC_NONCHK_TAG)
+        return 0;
     if (hdr->tag != ALLOCATION_TAG) {
         return -1;
     }
 
+#ifdef ENABLE_MEM_LEAK_TRACKER
     ScopedPthreadMutexLocker locker(&lock);
     del_locked(hdr, &tail, &head);
     num--;
+#endif
     return 0;
 }
 
@@ -236,7 +250,7 @@ static int was_used_after_free(hdr_t *hdr) {
     unsigned i;
     const char *data = (const char *)user(hdr);
     for (i = 0; i < hdr->size; i++)
-        if (data[i] != FREE_POISON)
+        if (data[i] != (char)FREE_POISON)
             return 1;
     return 0;
 }
@@ -245,7 +259,7 @@ static int was_used_after_free(hdr_t *hdr) {
 static inline int check_guards(hdr_t *hdr, int *safe) {
     *safe = 1;
     if (!is_front_guard_valid(hdr)) {
-        if (hdr->front_guard[0] == FRONT_GUARD) {
+        if (hdr->front_guard[0] == (char)FRONT_GUARD) {
             log_message("+++ ALLOCATION %p SIZE %d HAS A CORRUPTED FRONT GUARD\n",
                        user(hdr), hdr->size);
         } else {
@@ -308,7 +322,9 @@ static inline int del_and_check_locked(hdr_t *hdr,
                                        hdr_t **tail, hdr_t **head, unsigned *cnt,
                                        int *safe) {
     int valid = check_allocation_locked(hdr, safe);
-    if (safe) {
+    if (!valid || !*safe)
+        abort();
+    else if (*safe) {
         (*cnt)--;
         del_locked(hdr, tail, head);
     }
@@ -334,6 +350,12 @@ static inline int del_leak(hdr_t *hdr, int *safe) {
 }
 
 static inline void add_to_backlog(hdr_t *hdr) {
+    if (hdr->tag == ALLOC_NONCHK_TAG)
+    {
+        hdr->tag = 0;
+        dlfree(hdr);
+        return;
+    }
     ScopedPthreadMutexLocker locker(&backlog_lock);
     hdr->tag = BACKLOG_TAG;
     backlog_num++;
@@ -353,7 +375,8 @@ extern "C" void* chk_malloc(size_t size) {
     hdr_t* hdr = static_cast<hdr_t*>(dlmalloc(sizeof(hdr_t) + size + sizeof(ftr_t)));
     if (hdr) {
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        add(hdr, size);
+        fill_meta(hdr, size);
+        add(hdr);
         return user(hdr);
     }
     return NULL;
@@ -397,6 +420,7 @@ extern "C" void chk_free(void *ptr) {
             /* Leak here so that we do not crash */
             //dlfree(user(hdr));
         }
+        abort();
     } else {
         hdr->freed_bt_depth = get_backtrace(hdr->freed_bt,
                                       MAX_BACKTRACE_DEPTH);
@@ -407,14 +431,15 @@ extern "C" void chk_free(void *ptr) {
 extern "C" void *chk_realloc(void *ptr, size_t size) {
 //  log_message("%s: %s\n", __FILE__, __FUNCTION__);
 
+    if (!ptr)
+        return chk_malloc(size);
+
+#ifdef REALLOC_ZERO_BYTES_FREES
     if (!size) {
         chk_free(ptr);
         return NULL;
     }
-
-    if (!ptr) {
-        return chk_malloc(size);
-    }
+#endif /* REALLOC_ZERO_BYTES_FREES */
 
     hdr_t* hdr = meta(ptr);
 
@@ -446,15 +471,19 @@ extern "C" void *chk_realloc(void *ptr, size_t size) {
                        user(hdr), size);
             print_backtrace(bt, depth);
             // just get a whole new allocation and leak the old one
-            return dlrealloc(0, size);
+            // return dlrealloc(0, size);
             // return dlrealloc(user(hdr), size); // assuming it was allocated externally
         }
+        abort();
     }
 
+    hdr->freed_bt_depth = get_backtrace(hdr->freed_bt,
+                                  MAX_BACKTRACE_DEPTH);
     hdr = static_cast<hdr_t*>(dlrealloc(hdr, sizeof(hdr_t) + size + sizeof(ftr_t)));
     if (hdr) {
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        add(hdr, size);
+        fill_meta(hdr, size);
+        add(hdr);
         return user(hdr);
     }
 
@@ -468,13 +497,26 @@ extern "C" void *chk_calloc(int nmemb, size_t size) {
     if (hdr) {
         hdr->bt_depth = get_backtrace(
                             hdr->bt, MAX_BACKTRACE_DEPTH);
-        add(hdr, total_size);
+        fill_meta(hdr, total_size);
+        add(hdr);
         return user(hdr);
     }
     return NULL;
 }
 
+static void heaptracker_free_backlog_memory() {
+//  log_message("+++ DELETING %d BACKLOGGED ALLOCATIONS\n", backlog_num);
+    ScopedPthreadMutexLocker locker(&backlog_lock);
+    hdr_t *del = NULL;
+    while (backlog_head) {
+        del = backlog_tail;
+        del_from_backlog_locked(del);
+        dlfree(del);
+    }
+}
+
 static void heaptracker_free_leaked_memory() {
+    ScopedPthreadMutexLocker locker(&lock);
     if (num) {
         log_message("+++ THERE ARE %d LEAKED ALLOCATIONS\n", num);
     }
@@ -485,19 +527,12 @@ static void heaptracker_free_leaked_memory() {
         del = head;
         log_message("+++ DELETING %d BYTES OF LEAKED MEMORY AT %p (%d REMAINING)\n",
                 del->size, user(del), num);
-        if (del_leak(del, &safe)) {
+        if (del_and_check_locked(del, &tail, &head, &num, &safe)) {
             /* safe == 1, because the allocation is valid */
             log_message("+++ ALLOCATION %p SIZE %d ALLOCATED HERE:\n",
                         user(del), del->size);
             print_backtrace(del->bt, del->bt_depth);
         }
-        dlfree(del);
-    }
-
-//  log_message("+++ DELETING %d BACKLOGGED ALLOCATIONS\n", backlog_num);
-    while (backlog_head) {
-        del = backlog_tail;
-        del_from_backlog(del);
         dlfree(del);
     }
 }
@@ -514,5 +549,6 @@ extern "C" int malloc_debug_initialize() {
 
 extern "C" void malloc_debug_finalize() {
     heaptracker_free_leaked_memory();
+    heaptracker_free_backlog_memory();
     deinit_mapinfo(milist);
 }
