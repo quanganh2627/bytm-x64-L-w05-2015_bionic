@@ -34,8 +34,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#define min(a, b)       (a) < (b) ? a : b
-
 struct DIR
 {
     int              _DIR_fd;
@@ -135,8 +133,6 @@ _readdir_unlocked(DIR*  dir)
 
     dir->_DIR_next   = (struct dirent*)((char*)entry + entry->d_reclen);
     dir->_DIR_avail -= entry->d_reclen;
-
-    entry->d_reclen = min(entry->d_reclen, sizeof(struct dirent));
 
     return entry;
 

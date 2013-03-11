@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011, Intel Corporation
+Copyright (c) 2010, Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,13 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define MEMCMP  wmemcmp
-#define USE_AS_WMEMCMP 1
-#include "ssse3-memcmp-atom.S"
+#if defined(USE_SSSE3)
+
+# define MEMCMP memcmp
+# include "ssse3-memcmp3-new.S"
+
+#else
+
+# include "memcmp.S"
+
+#endif

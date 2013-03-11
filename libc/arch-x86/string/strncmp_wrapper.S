@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011, Intel Corporation
+Copyright (c) 2010, Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,15 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define USE_AS_STRNCPY
-#define STRCPY strncpy
-#include "ssse3-strcpy-atom.S"
+#if defined(USE_SSSE3)
+
+# define USE_AS_STRNCMP
+# define ssse3_strcmp_latest strncmp
+# include "ssse3-strcmp-latest.S"
+
+#else
+
+# include "strncmp.S"
+
+#endif
+

@@ -18,16 +18,10 @@ ifneq ($(BUILD_TINY_ANDROID), true)
 
 LOCAL_PATH := $(call my-dir)
 
-test_c_flags = \
-    -fstack-protector \
-    -g \
-    -Wall -Wextra \
-
 test_src_files = \
     getcwd_test.cpp \
     pthread_test.cpp \
     regex_test.cpp \
-    stack_protector_test.cpp \
     string_test.cpp \
     stubs_test.cpp \
 
@@ -40,7 +34,6 @@ test_dynamic_src_files = \
 include $(CLEAR_VARS)
 LOCAL_MODULE := bionic-unit-tests
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-LOCAL_CFLAGS += $(test_c_flags)
 LOCAL_LDFLAGS += $(test_dynamic_ldflags)
 LOCAL_SHARED_LIBRARIES += libdl
 LOCAL_SRC_FILES := $(test_src_files) $(test_dynamic_src_files)
@@ -51,7 +44,6 @@ include $(BUILD_NATIVE_TEST)
 include $(CLEAR_VARS)
 LOCAL_MODULE := bionic-unit-tests-static
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-LOCAL_CFLAGS += $(test_c_flags)
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_SRC_FILES := $(test_src_files)
 LOCAL_STATIC_LIBRARIES += libstlport_static libstdc++ libm libc
@@ -65,7 +57,6 @@ ifeq ($(HOST_OS)-$(HOST_ARCH),linux-x86)
 include $(CLEAR_VARS)
 LOCAL_MODULE := bionic-unit-tests-glibc
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-LOCAL_CFLAGS += $(test_c_flags)
 LOCAL_LDFLAGS += -lpthread -ldl
 LOCAL_LDFLAGS += $(test_dynamic_ldflags)
 LOCAL_SRC_FILES := $(test_src_files) $(test_dynamic_src_files)

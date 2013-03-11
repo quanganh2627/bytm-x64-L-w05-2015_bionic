@@ -106,6 +106,7 @@
 #define _ASM_SIZE(x)    .size x, .-x;
 
 #define _END(x) \
+	.fnend; \
 	_ASM_SIZE(x)
 
 #ifdef GPROF

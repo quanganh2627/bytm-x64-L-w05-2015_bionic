@@ -48,7 +48,6 @@
 #include "bionic_atomic_inline.h"
 #include "bionic_futex.h"
 #include "bionic_pthread.h"
-#include "bionic_ssp.h"
 #include "bionic_tls.h"
 #include "pthread_internal.h"
 #include "thread_private.h"
@@ -86,7 +85,6 @@ static const int kPthreadInitFailed = 1;
 
 #define PTHREAD_ATTR_FLAG_DETACHED      0x00000001
 #define PTHREAD_ATTR_FLAG_USER_STACK    0x00000002
-#define PTHREAD_ATTR_FLAG_IN_LOGMSG     0x00000004
 
 #define DEFAULT_STACKSIZE (1024 * 1024)
 
@@ -171,16 +169,14 @@ void  __init_tls(void**  tls, void*  thread)
 
     ((pthread_internal_t*)thread)->tls = tls;
 
-    // Slot 0 must point to itself. The x86 Linux kernel reads the TLS from %fs:0.
+    // slot 0 must point to the tls area, this is required by the implementation
+    // of the x86 Linux kernel thread-local-storage
     tls[TLS_SLOT_SELF]      = (void*)tls;
     tls[TLS_SLOT_THREAD_ID] = thread;
     for (nn = TLS_SLOT_ERRNO; nn < BIONIC_TLS_SLOTS; nn++)
        tls[nn] = 0;
 
-    // Stack guard generation may make system calls, and those system calls may fail.
-    // If they do, they'll try to set errno, so we can only do this after calling __set_tls.
     __set_tls( (void*)tls );
-    tls[TLS_SLOT_STACK_GUARD] = __generate_stack_chk_guard();
 }
 
 
@@ -418,29 +414,6 @@ int pthread_attr_getdetachstate(pthread_attr_t const * attr, int * state)
     return 0;
 }
 
-int pthread_attr_setinlogmsg(int state)
-{
-    pthread_internal_t*  thread = __get_thread();
-    if (state == PTHREAD_IN_LOGMSG) {
-        thread->attr.flags |= PTHREAD_ATTR_FLAG_IN_LOGMSG;
-    } else if (state == PTHREAD_OUT_LOGMSG) {
-        thread->attr.flags &= ~PTHREAD_ATTR_FLAG_IN_LOGMSG;
-    } else {
-        return EINVAL;
-    }
-    return 0;
-}
-
-int pthread_attr_getinlogmsg(int * state)
-{
-    pthread_internal_t*  thread = __get_thread();
-    *state = (thread->attr.flags & PTHREAD_ATTR_FLAG_IN_LOGMSG)
-           ? PTHREAD_IN_LOGMSG
-           : PTHREAD_OUT_LOGMSG;
-    return 0;
-}
-
-
 int pthread_attr_setschedpolicy(pthread_attr_t * attr, int policy)
 {
     attr->sched_policy = policy;
@@ -609,7 +582,7 @@ void pthread_exit(void * retval)
     pthread_key_clean_all();
 
     // if the thread is detached, destroy the pthread_internal_t
-    // otherwise, keep it in memory and signal any joiners.
+    // otherwise, keep it in memory and signal any joiners
     if (thread->attr.flags & PTHREAD_ATTR_FLAG_DETACHED) {
         _pthread_internal_remove(thread);
         _pthread_internal_free(thread);
@@ -691,9 +664,8 @@ FoundIt:
         pthread_cond_wait( &thread->join_cond, &gThreadListLock );
         count = --thread->join_count;
     }
-    if (ret_val) {
+    if (ret_val)
         *ret_val = thread->return_value;
-    }
 
     /* remove thread descriptor when we're the last joiner or when the
      * thread was already a zombie.
@@ -710,30 +682,28 @@ int  pthread_detach( pthread_t  thid )
 {
     pthread_internal_t*  thread;
     int                  result = 0;
+    int                  flags;
 
     pthread_mutex_lock(&gThreadListLock);
-    for (thread = gThreadList; thread != NULL; thread = thread->next) {
-        if (thread == (pthread_internal_t*)thid) {
+    for (thread = gThreadList; thread != NULL; thread = thread->next)
+        if (thread == (pthread_internal_t*)thid)
             goto FoundIt;
-        }
-    }
 
     result = ESRCH;
     goto Exit;
 
 FoundIt:
-    if (thread->attr.flags & PTHREAD_ATTR_FLAG_DETACHED) {
-        result = EINVAL; // Already detached.
-        goto Exit;
+    do {
+        flags = thread->attr.flags;
+
+        if ( flags & PTHREAD_ATTR_FLAG_DETACHED ) {
+            /* thread is not joinable ! */
+            result = EINVAL;
+            goto Exit;
+        }
     }
-
-    if (thread->join_count > 0) {
-        result = 0; // Already being joined; silently do nothing, like glibc.
-        goto Exit;
-    }
-
-    thread->attr.flags |= PTHREAD_ATTR_FLAG_DETACHED;
-
+    while ( __bionic_cmpxchg( flags, flags | PTHREAD_ATTR_FLAG_DETACHED,
+                              (volatile int*)&thread->attr.flags ) != 0 );
 Exit:
     pthread_mutex_unlock(&gThreadListLock);
     return result;

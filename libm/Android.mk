@@ -1,4 +1,3 @@
-ifndef USE_PRIVATE_LIBM
 LOCAL_PATH:= $(call my-dir)
 
 libm_common_src_files:= \
@@ -228,4 +227,3 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_SYSTEM_SHARED_LIBRARIES := libc
 
 include $(BUILD_SHARED_LIBRARY)
-endif

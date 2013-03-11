@@ -36,9 +36,3 @@ TEST(dlopen, dlsym_in_self) {
   function();
   ASSERT_TRUE(gCalled);
 }
-
- static void* ConcurrentDlErrorFn(void*) {
-  dlopen("/child/thread", RTLD_NOW);
-  return reinterpret_cast<void*>(strdup(dlerror()));
-}
-
