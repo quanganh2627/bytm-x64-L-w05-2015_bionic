@@ -110,7 +110,8 @@ void *memcpy (void *dest, const void *src, size_t copy_amount) {
     }
 
     if (__builtin_constant_p(d - s) && __builtin_constant_p(copy_amount)
-            && (((size_t)(d - s) < copy_amount) || ((size_t)(s - d) < copy_amount))) {
+            && (((size_t)(d - s) < copy_amount) || ((size_t)(s - d) < copy_amount))
+            && ((size_t)(d - s) != 0)) {
         __memcpy_overlap_error();
     }
 
