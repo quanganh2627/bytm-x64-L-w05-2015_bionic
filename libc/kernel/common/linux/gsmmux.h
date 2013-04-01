@@ -36,20 +36,21 @@ struct gsm_config {
  unsigned int i;
  unsigned int clocal;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int unused[7];
+ unsigned int burst;
+ unsigned int unused[6];
 };
 #define GSMIOC_GETCONF _IOR('G', 0, struct gsm_config)
-#define GSMIOC_SETCONF _IOW('G', 1, struct gsm_config)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define GSMIOC_SETCONF _IOW('G', 1, struct gsm_config)
 struct gsm_netconfig {
  unsigned int adaption;
  unsigned short protocol;
- unsigned short unused2;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned short unused2;
  char if_name[IFNAMSIZ];
  __u8 unused[28];
 };
-#define GSMIOC_ENABLE_NET _IOW('G', 2, struct gsm_netconfig)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define GSMIOC_ENABLE_NET _IOW('G', 2, struct gsm_netconfig)
 #define GSMIOC_DISABLE_NET _IO('G', 3)
 #endif

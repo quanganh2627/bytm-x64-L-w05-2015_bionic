@@ -21,12 +21,12 @@
 #include <linux/ioctl.h>
 #define BC_FOURCC(a,b,c,d)   ((unsigned long) ((a) | (b)<<8 | (c)<<16 | (d)<<24))
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define BC_PIX_FMT_NV12 BC_FOURCC('N', 'V', '1', '2')  
-#define BC_PIX_FMT_UYVY BC_FOURCC('U', 'Y', 'V', 'Y')  
-#define BC_PIX_FMT_YUYV BC_FOURCC('Y', 'U', 'Y', 'V')  
-#define BC_PIX_FMT_RGB565 BC_FOURCC('R', 'G', 'B', 'P')  
+#define BC_PIX_FMT_NV12 BC_FOURCC('N', 'V', '1', '2')
+#define BC_PIX_FMT_UYVY BC_FOURCC('U', 'Y', 'V', 'Y')
+#define BC_PIX_FMT_YUYV BC_FOURCC('Y', 'U', 'Y', 'V')
+#define BC_PIX_FMT_RGB565 BC_FOURCC('R', 'G', 'B', 'P')
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define BC_PIX_FMT_YV12 BC_FOURCC('Y', 'V', '1', '2')  
+#define BC_PIX_FMT_YV12 BC_FOURCC('Y', 'V', '1', '2')
 typedef struct BC_Video_ioctl_package_TAG {
  int ioctl_cmd;
  int device_id;
@@ -44,9 +44,9 @@ typedef struct bc_buf_ptr {
 } bc_buf_ptr_t;
 #define BC_Video_ioctl_fill_buffer 0
 #define BC_Video_ioctl_get_buffer_count 1
-#define BC_Video_ioctl_get_buffer_phyaddr 2  
+#define BC_Video_ioctl_get_buffer_phyaddr 2
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define BC_Video_ioctl_get_buffer_index 3  
+#define BC_Video_ioctl_get_buffer_index 3
 #define BC_Video_ioctl_request_buffers 4
 #define BC_Video_ioctl_set_buffer_phyaddr 5
 #define BC_Video_ioctl_release_buffer_device 6
