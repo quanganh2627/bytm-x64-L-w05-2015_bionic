@@ -136,7 +136,8 @@ enum VssProcCommandType {
  VssProcPictureCommand = 0xFFF9,
  VspFencePictureParamCommand = 0xEBEC,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- VspSetContextCommand = 0xEBED
+ VspSetContextCommand = 0xEBED,
+ Vss_Sys_STATE_BUF_COMMAND
 };
 enum vsp_format {
  VSP_NV12,
@@ -151,4 +152,93 @@ enum vsp_format {
  VSP_TYPE_ERROR
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+
+/****************************
+ * VP8enc data structures
+ ****************************/
+
+/**
+ * Picture data structure. Currently the same as frc
+ */
+
+struct VssProcPictureVP8 {
+    uint32_t surface_id;
+    uint32_t irq;  /* send interupt when input or output surface is ready */
+    uint32_t base; /* pointer to picture in DDR */
+    uint32_t height;
+    uint32_t width;
+    uint32_t stride;
+    uint32_t format; /* frame raw format */
+};
+
+/**
+ * Sequence parameter data structure.
+ */
+struct VssVp8encSequenceParameterBuffer {
+    uint32_t frame_width;
+    uint32_t frame_height;
+    uint32_t frame_rate;
+    uint32_t error_resilient;
+    uint32_t num_token_partitions;
+    uint32_t kf_mode;
+    uint32_t kf_min_dist;
+    uint32_t kf_max_dist;
+    uint32_t rc_target_bitrate;
+    uint32_t rc_min_quantizer;
+    uint32_t rc_max_quantizer;
+    uint32_t rc_undershoot_pct;
+    uint32_t rc_overshoot_pct;
+    uint32_t rc_end_usage;
+    uint32_t rc_buf_sz;
+    uint32_t rc_buf_initial_sz;
+    uint32_t rc_buf_optimal_sz;
+    uint32_t max_intra_rate;
+    uint32_t cyclic_intra_refresh;
+    uint32_t concatenate_partitions;
+
+    struct VssProcPictureVP8 ref_frame_buffers[4];
+};
+
+struct VssVp8encEncodedFrame {
+    uint32_t frame_size;
+    uint32_t status;
+    uint32_t partitions;
+    uint32_t partition_size[9];
+    uint32_t partition_start[9];
+    uint32_t segments;
+    uint32_t quantizer[4];
+    uint32_t frame_flags;
+    uint32_t ref_frame_flags;
+    uint32_t partition_id;
+    uint32_t buffer_level;
+    uint32_t quality;
+    uint32_t reserved;
+    uint32_t coded_data[1];
+};
+
+/**
+ * Encode frame command buffer
+ */
+struct VssVp8encPictureParameterBuffer {
+    struct VssProcPictureVP8 input_frame;
+
+    uint32_t version;
+    uint32_t pic_flags;
+    uint32_t prev_frame_dropped;
+    uint32_t cpuused;
+    uint32_t sharpness;
+    uint32_t num_token_partitions;
+    uint32_t encoded_frame_size;
+    uint32_t encoded_frame_base;
+};
+
+/**
+ * Command enumeration
+ */
+enum VssVp8encCommandType {
+    VssVp8encSetSequenceParametersCommand = 123,
+    VssVp8encEncodeFrameCommand,
+    VssVp8encEndOfSequenceCommand
+};
+
 #endif
