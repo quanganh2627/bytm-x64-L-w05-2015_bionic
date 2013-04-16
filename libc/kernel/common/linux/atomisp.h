@@ -119,126 +119,216 @@ struct atomisp_3a_config {
  int af_fir1_coef[7];
  int af_fir2_coef[7];
 };
-struct atomisp_grid_info {
+#ifdef ATOMISP_CSS2
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct atomisp_grid_info {
+ uint32_t enable;
+ uint32_t use_dmem;
+ uint32_t has_histogram;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t s3a_width;
+ uint32_t s3a_height;
+ uint32_t aligned_width;
+ uint32_t aligned_height;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t s3a_bqs_per_grid_cell;
+ uint32_t deci_factor_log2;
+ uint32_t elem_bit_depth;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#else
+struct atomisp_grid_info {
  unsigned int isp_in_width;
  unsigned int isp_in_height;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int s3a_width;
  unsigned int s3a_height;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int s3a_bqs_per_grid_cell;
  unsigned int dis_width;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int dis_aligned_width;
  unsigned int dis_height;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int dis_aligned_height;
  unsigned int dis_bqs_per_grid_cell;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int dis_hor_coef_num;
  unsigned int dis_ver_coef_num;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
+#endif
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct atomisp_dis_vector {
  int x;
  int y;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct atomisp_dis_coefficients {
  struct atomisp_grid_info grid_info;
  short __user *vertical_coefficients;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  short __user *horizontal_coefficients;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
 struct atomisp_dis_statistics {
  struct atomisp_grid_info grid_info;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  int __user *vertical_projections;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  int __user *horizontal_projections;
 };
+struct atomisp_3a_rgby_output {
+ uint32_t r;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t g;
+ uint32_t b;
+ uint32_t y;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#ifdef ATOMISP_CSS2
+struct atomisp_3a_statistics {
+ struct atomisp_grid_info grid_info;
+ struct atomisp_3a_output __user *data;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_3a_rgby_output __user *rgby_data;
+};
+#else
 struct atomisp_3a_statistics {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_grid_info grid_info;
  struct atomisp_3a_output __user *data;
 };
-struct atomisp_cont_capture_conf {
+#endif
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct atomisp_cont_capture_conf {
  int num_captures;
  unsigned int skip_frames;
  int offset;
- __u32 reserved[5];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 reserved[5];
 };
 struct atomisp_wb_config {
  unsigned int integer_bits;
- unsigned int gr;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int gr;
  unsigned int r;
  unsigned int b;
  unsigned int gb;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct atomisp_cc_config {
  unsigned int fraction_bits;
  int matrix[3 * 3];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct atomisp_de_config {
  unsigned int pixelnoise;
  unsigned int c1_coring_threshold;
- unsigned int c2_coring_threshold;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int c2_coring_threshold;
 };
 struct atomisp_ce_config {
  unsigned int uv_level_min;
- unsigned int uv_level_max;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int uv_level_max;
 };
 struct atomisp_dp_config {
  unsigned int threshold;
- unsigned int gain;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int gain;
 };
 struct atomisp_xnr_config {
  unsigned int threshold;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct atomisp_parm {
  struct atomisp_grid_info info;
  struct atomisp_wb_config wb_config;
- struct atomisp_cc_config cc_config;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_cc_config cc_config;
  struct atomisp_ob_config ob_config;
  struct atomisp_de_config de_config;
  struct atomisp_ce_config ce_config;
- struct atomisp_dp_config dp_config;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_dp_config dp_config;
  struct atomisp_nr_config nr_config;
  struct atomisp_ee_config ee_config;
  struct atomisp_tnr_config tnr_config;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
+#ifdef ATOMISP_CSS2
 struct atomisp_parameters {
+ struct atomisp_wb_config *wb_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_cc_config *cc_config;
+ struct atomisp_tnr_config *tnr_config;
+ struct atomisp_ecd_config *ecd_config;
+ struct atomisp_ynr_config *ynr_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_fc_config *fc_config;
+ struct atomisp_cnr_config *cnr_config;
+ struct atomisp_macc_config *macc_config;
+ struct atomisp_ctc_config *ctc_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_aa_config *aa_config;
+ struct atomisp_ce_config *ce_config;
+ struct atomisp_dvs_6axis_config *dvs_6axis_config;
+ struct atomisp_ob_config *ob_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_dp_config *dp_config;
+ struct atomisp_nr_config *nr_config;
+ struct atomisp_ee_config *ee_config;
+ struct atomisp_de_config *de_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_gc_config *gc_config;
+ struct atomisp_anr_config *anr_config;
+ struct atomisp_3a_config *a3a_config;
+ struct atomisp_xnr_config *xnr_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_dz_config *dz_config;
+ struct atomisp_cc_config *yuv2rgb_cc_config;
+ struct atomisp_cc_config *rgb2yuv_cc_config;
+ struct atomisp_macc_table *macc_table;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_gamma_table *gamma_table;
+ struct atomisp_ctc_table *ctc_table;
+ struct atomisp_xnr_table *xnr_table;
+ struct atomisp_rgb_gamma_table *r_gamma_table;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_rgb_gamma_table *g_gamma_table;
+ struct atomisp_rgb_gamma_table *b_gamma_table;
+ struct atomisp_vector *motion_vector;
+ struct atomisp_shading_table *shading_table;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_morph_table *morph_table;
+ struct atomisp_dvs_coefficients *dvs_coefs;
+ struct atomisp_dvs2_coefficients *dvs2_coefs;
+ struct atomisp_capture_config *capture_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct atomisp_anr_thres *anr_thres;
+};
+#else
+struct atomisp_parameters {
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_wb_config *wb_config;
  struct atomisp_cc_config *cc_config;
  struct atomisp_ob_config *ob_config;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_de_config *de_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_ce_config *ce_config;
  struct atomisp_dp_config *dp_config;
  struct atomisp_nr_config *nr_config;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_ee_config *ee_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_tnr_config *tnr_config;
  struct atomisp_shading_table *shading_table;
  struct atomisp_morph_table *morph_table;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_macc_config *macc_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_gamma_table *gamma_table;
  struct atomisp_ctc_table *ctc_table;
  struct atomisp_xnr_config *xnr_config;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_gc_config *gc_config;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  struct atomisp_3a_config *a3a_config;
 };
+#endif
 #define ATOMISP_GAMMA_TABLE_SIZE 1024
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct atomisp_gamma_table {
