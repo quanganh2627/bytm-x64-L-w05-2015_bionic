@@ -29,9 +29,9 @@ struct ct_monitor_ctx {
 	int thread_should_stop;
 	int sock_nl_fd;
 	int sock_fd;
-	const char *path_stat_dir;
-	const char *path_crash_dir;
-	const char *path_info_dir;
+	char *path_stat_dir;
+	char *path_crash_dir;
+	char *path_info_dir;
 };
 
 enum ctm_ev_pending {
@@ -47,18 +47,14 @@ typedef int (*ev_handler_t)(struct ct_event *ev);
 extern int ctm_nl_init(void);
 extern int ctm_nl_exit(int fd);
 extern int ctm_nl_sendto_kct(int fd, int type, const void *data, unsigned int size);
-extern int ctm_nl_get_packet(int fd, struct kct_packet **pkt, int flags);
+extern struct kct_packet *ctm_nl_get_packet(int fd, int flags);
 extern int ctm_nl_dclr_pid(int fd);
 
 /* ctm_comm.c */
-extern enum ctm_ev_pending	ctm_comm_wait_event(struct ct_monitor_ctx*, long timeout);
-extern int			ctm_comm_init(struct ct_monitor_ctx*);
-extern int			ctm_comm_exit(struct ct_monitor_ctx*);
-extern int			ctm_comm_handle_socket_msg(struct ct_monitor_ctx *ctx);
-extern int			ctm_comm_handle_netlink_msg(struct ct_monitor_ctx *ctx);
-
-/* ctm_signal.c */
-extern int ctm_sig_init(void);
+extern enum ctm_ev_pending	ctm_comm_wait_event(long timeout);
+extern int				lct_server_init(void);
+extern void			ctm_comm_handle_socket_msg(void);
+extern void			ctm_comm_handle_netlink_msg(void);
 
 /* ctm_print.c */
 extern void print_ct_attchmt(struct ct_attchmt *at);
@@ -68,8 +64,6 @@ extern void print_ct_event(struct ct_event *ev);
 /* ctm_handlers.c */
 extern int ct_stat_handler(struct ct_event *ev);
 extern int ct_crash_handler(struct ct_event *ev);
-/* extern int ct_error_handler(struct ct_event *ev); */
-/* extern int ct_info_handler(struct ct_event *ev); */
 
 extern struct ct_monitor_ctx ctm_ctx;
 
