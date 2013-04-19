@@ -212,7 +212,8 @@ struct VssVp8encEncodedFrame {
     uint32_t partition_id;
     uint32_t buffer_level;
     uint32_t quality;
-    uint32_t reserved;
+    uint32_t surfaced_of_ref_frame[3];
+    uint32_t reserved[15];
     uint32_t coded_data[1];
 };
 
@@ -221,6 +222,7 @@ struct VssVp8encEncodedFrame {
  */
 struct VssVp8encPictureParameterBuffer {
     struct VssProcPictureVP8 input_frame;
+    struct VssProcPictureVP8 recon_frame;
 
     uint32_t version;
     uint32_t pic_flags;
