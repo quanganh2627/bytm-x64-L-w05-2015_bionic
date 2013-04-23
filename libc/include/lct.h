@@ -5,7 +5,6 @@
 #include <sys/un.h>
 #include <linux/kct.h>
 
-#define	EV_FLAGS_PRIORITY_LOW	(1<<0)
 /* prefix of properties used to filter events */
 #define	PROP_PREFIX "dev.log."
 

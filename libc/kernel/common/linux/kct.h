@@ -3,6 +3,9 @@
 
 #  include <linux/netlink.h>
 
+/* flags to optionally filter events on android property activation */
+#define	EV_FLAGS_PRIORITY_LOW	1
+
 #  ifndef MAX_SB_N
 #    define MAX_SB_N 32
 #  endif
