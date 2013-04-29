@@ -1,6 +1,12 @@
 #ifndef LCT_H_
 # define LCT_H_
 
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <linux/kct.h>
