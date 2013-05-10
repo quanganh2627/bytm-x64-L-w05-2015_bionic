@@ -47,7 +47,7 @@ typedef int (*ev_handler_t)(struct ct_event *ev);
 extern int ctm_nl_init(void);
 extern int ctm_nl_exit(int fd);
 extern int ctm_nl_sendto_kct(int fd, int type, const void *data, unsigned int size);
-extern struct kct_packet *ctm_nl_get_packet(int fd, int flags);
+extern struct kct_packet *ctm_nl_get_packet(int fd);
 extern int ctm_nl_dclr_pid(int fd);
 
 /* ctm_comm.c */
