@@ -103,6 +103,10 @@ extern int sched_setaffinity(pid_t pid, size_t setsize, const cpu_set_t* set);
 
 extern int sched_getaffinity(pid_t pid, size_t setsize, cpu_set_t* set);
 
+extern int sched_start_affinity(pid_t tid);
+
+extern int sched_end_affinity(pid_t tid);
+
 /* Provide optimized implementation for 32-bit cpu_set_t */
 #if CPU_SETSIZE == __CPU_BITS
 

@@ -2,7 +2,7 @@
 #include <machine/asm.h>
 #include <sys/linux-syscalls.h>
 
-ENTRY(sched_setaffinity)
+ENTRY(__sched_setaffinity)
     pushl   %ebx
     pushl   %ecx
     pushl   %edx
@@ -23,4 +23,4 @@ ENTRY(sched_setaffinity)
     popl    %ecx
     popl    %ebx
     ret
-END(sched_setaffinity)
+END(__sched_setaffinity)

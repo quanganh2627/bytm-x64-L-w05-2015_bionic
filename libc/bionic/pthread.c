@@ -25,7 +25,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
-
+#define _GNU_SOURCE 1
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -60,6 +60,9 @@ extern int  __pthread_clone(int (*fn)(void*), void *child_stack, int flags, void
 extern void _exit_with_stack_teardown(void * stackBase, int stackSize, int retCode);
 extern void _exit_thread(int  retCode);
 extern int  __set_errno(int);
+
+extern int __sched_setaffinity(pid_t pid, size_t setsize, const cpu_set_t* set);
+extern int __sched_get_affinity(cpu_set_t *cpu_set);
 
 int  __futex_wake_ex(volatile void *ftx, int pshared, int val)
 {
@@ -371,6 +374,13 @@ int pthread_create(pthread_t *thread_out, pthread_attr_t const * attr,
         pthread_mutex_unlock(start_mutex);
         errno = old_errno;
         return init_errno;
+    }
+
+    // Current thread may have a limited affinity for performance improvement
+    // that is inherited, so restore its backuped value for the new thread
+    cpu_set_t cpuSet;
+    if (__sched_get_affinity(&cpuSet)) {
+        __sched_setaffinity(tid, sizeof(cpuSet), &cpuSet);
     }
 
     // Notify any debuggers about the new thread.
