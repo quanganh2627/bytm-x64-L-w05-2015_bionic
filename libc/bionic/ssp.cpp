@@ -43,39 +43,7 @@ static void __attribute__((constructor)) __init_stack_check_guard() {
   __stack_chk_guard = __generate_stack_chk_guard();
 }
 
-// This is the crash handler.
-// Does a best effort at logging and calls _exit to terminate
-// the process immediately (without atexit handlers, etc.).
 void __stack_chk_fail() {
-  // Immediately block all (but SIGABRT) signal handlers from running code.
-  sigset_t sigmask;
-  sigfillset(&sigmask);
-  sigdelset(&sigmask, SIGABRT);
-  sigprocmask(SIG_BLOCK, &sigmask, NULL);
-
-  // Use /proc/self/exe link to obtain the program name for logging
-  // purposes. If it's not available, we set it to "<unknown>".
-  char path[PATH_MAX];
-  int count;
-  if ((count = readlink("/proc/self/exe", path, sizeof(path) - 1)) == -1) {
-    strlcpy(path, "<unknown>", sizeof(path));
-  } else {
-    path[count] = '\0';
-  }
-
-  // Do a best effort at logging. This ends up calling writev(2).
-  __libc_android_log_print(ANDROID_LOG_FATAL, path, "stack corruption detected: aborted");
-
-  // Make sure there is no default action for SIGABRT.
-  struct sigaction sa;
-  memset(&sa, 0, sizeof(sa));
-  sigemptyset(&sa.sa_mask);
-  sa.sa_flags = 0;
-  sa.sa_handler = SIG_DFL;
-  sigaction(SIGABRT, &sa, NULL);
-
-  // Terminate the process and exit immediately.
-  kill(getpid(), SIGABRT);
-
-  _exit(127);
+  __libc_android_log_print(ANDROID_LOG_FATAL, "libc", "stack corruption detected");
+  abort();
 }
