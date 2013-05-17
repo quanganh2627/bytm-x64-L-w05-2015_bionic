@@ -202,3 +202,5 @@ syscall_src += arch-x86/syscalls/inotify_add_watch.S
 syscall_src += arch-x86/syscalls/inotify_rm_watch.S
 syscall_src += arch-x86/syscalls/poll.S
 syscall_src += arch-x86/syscalls/eventfd.S
+syscall_src += arch-x86/syscalls/fanotify_init.S
+syscall_src += arch-x86/syscalls/fanotify_mark.S
