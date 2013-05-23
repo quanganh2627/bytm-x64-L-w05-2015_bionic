@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #include <sys/types.h>
@@ -69,23 +70,26 @@
 		} \
 	} while (0)
 
+/* keep ONE return to ensure inline */
 extern inline struct ct_event *lct_alloc_event(const char *submitter_name,
 					       const char *ev_name,
 					       enum ct_ev_type ev_type,
 					       unsigned int flags)
 {
-	struct ct_event *ev = calloc(1, sizeof(*ev));
-	if (ev) {
-		if (submitter_name)
-			strncpy(ev->submitter_name, submitter_name,
-				sizeof(ev->submitter_name));
-		if (ev_name)
-			strncpy(ev->ev_name, ev_name,
-				sizeof(ev->ev_name));
-		ev->timestamp = 0x42;
-		ev->flags = flags;
-		ev->type = ev_type;
+	struct ct_event *ev = NULL;
+
+	if (submitter_name && ev_name) {
+		ev = calloc(1, sizeof(*ev));
+		if (ev)  {
+			strncpy(ev->submitter_name, submitter_name, sizeof(ev->submitter_name)-1);
+			strncpy(ev->ev_name, ev_name, sizeof(ev->ev_name)-1);
+		
+			ev->timestamp = time(NULL);
+			ev->flags = flags;
+			ev->type = ev_type;
+		}
 	}
+
 	return ev;
 }
 
