@@ -18,21 +18,21 @@
 
 #  define max(X, Y)  ((X) < (Y) ? (Y) : (X))
 
-#  define STAT_TRIG_SUFFIX  "_trigger"
 #  define CRASH_TRIG_SUFFIX "_trigger"
 #  define INFO_TRIG_SUFFIX  "_infoevent"
+#  define STAT_TRIG_SUFFIX  "_trigger"
 
-#  define INFO_DATA_SUFFIX "_data"
 #  define CRASH_DATA_SUFFIX "_data"
+#  define INFO_DATA_SUFFIX "_data"
+#  define STAT_DATA_SUFFIX "_data"
 
-struct ct_monitor_ctx {
-	int thread_should_stop;
-	int sock_nl_fd;
-	int sock_fd;
-	char *path_stat_dir;
-	char *path_crash_dir;
-	char *path_info_dir;
-};
+#  define CRASH_PATH_DIR "/logs/cwscrash"
+#  define INFO_PATH_DIR "/logs/stats"
+#  define STAT_PATH_DIR "/logs/stats"
+
+extern int thread_should_stop;
+extern int sock_nl_fd;
+extern int sock_fd;
 
 enum ctm_ev_pending {
 	EV_PENDING_ALL,
@@ -45,10 +45,8 @@ typedef int (*ev_handler_t)(struct ct_event *ev);
 
 /* ctm_netlink.c */
 extern int ctm_nl_init(void);
-extern int ctm_nl_exit(int fd);
 extern int ctm_nl_sendto_kct(int fd, int type, const void *data, unsigned int size);
 extern struct kct_packet *ctm_nl_get_packet(int fd);
-extern int ctm_nl_dclr_pid(int fd);
 
 /* ctm_comm.c */
 extern enum ctm_ev_pending	ctm_comm_wait_event(long timeout);
