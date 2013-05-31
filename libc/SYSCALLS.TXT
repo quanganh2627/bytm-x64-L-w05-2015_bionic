@@ -313,3 +313,8 @@ int     cacheflush:ARM_cacheflush(long start, long end, long flags)  983042,-1,-
 # MIPS-specific
 int	_flush_cache:cacheflush(char *addr, const int nbytes, const int op)	-1,-1,147
 int	syscall(int number,...) -1,-1,0
+
+# fanotify
+int     fanotify_init(unsigned int, unsigned int)                       367,338,336
+int     fanotify_mark(int, unsigned int, uint64_t, int, const char *)   368,339,337
+
