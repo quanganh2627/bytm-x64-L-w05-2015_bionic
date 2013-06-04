@@ -1,6 +1,7 @@
 #ifndef KCT_H_
 #  define KCT_H_
 
+#  include <sys/socket.h>
 #  include <linux/netlink.h>
 
 /* flags to optionally filter events on android property activation */
