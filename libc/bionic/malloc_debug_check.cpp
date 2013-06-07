@@ -382,10 +382,51 @@ extern "C" void* chk_malloc(size_t size) {
     return NULL;
 }
 
-extern "C" void* chk_memalign(size_t, size_t bytes) {
-//  log_message("%s: %s\n", __FILE__, __FUNCTION__);
-    // XXX: it's better to use malloc, than being wrong
-    return chk_malloc(bytes);
+extern "C" void* chk_memalign(size_t alignment, size_t bytes)
+{
+    hdr_t * hdr;
+    size_t size = 0;
+    intptr_t ptr = 0;
+    size_t remainder = 0;
+
+    // we can just use malloc
+    // if (alignment <= MALLOC_ALIGNMENT)
+    //    return chk_malloc(bytes);
+
+    // need to make sure it's a power of two
+    if (alignment & (alignment-1))
+        alignment = 1L << (31 - __builtin_clz(alignment));
+
+    // here, aligment is at least MALLOC_ALIGNMENT<<1 bytes
+    // we will align by at least MALLOC_ALIGNMENT bytes
+    // and at most alignment-MALLOC_ALIGNMENT bytes
+    if (alignment >= sizeof(hdr_t))
+        size = alignment + bytes + sizeof(struct hdr_t) + sizeof(struct ftr_t);
+    else
+        size = sizeof(struct hdr_t) + bytes + sizeof(struct hdr_t) + sizeof(struct ftr_t);
+
+    hdr = static_cast<hdr_t*>(dlmalloc(size));
+    if (hdr) {
+        if (alignment >= sizeof(struct hdr_t)) {
+            ptr = (intptr_t)hdr;
+            remainder = (-ptr)%alignment;
+            if (remainder >= sizeof(struct hdr_t))
+                ptr += remainder;
+            else
+                ptr += remainder + alignment;
+        }
+        else {
+            ptr = (intptr_t)((unsigned long)hdr +sizeof(struct hdr_t));
+            remainder = (-ptr)%alignment;
+            ptr += remainder;
+        }
+        hdr = static_cast<hdr_t*>((void*)(ptr - sizeof(struct hdr_t)));
+        hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
+        fill_meta(hdr, bytes);
+        add(hdr);
+        return  user(hdr);
+    }
+    return NULL;
 }
 
 extern "C" void chk_free(void *ptr) {

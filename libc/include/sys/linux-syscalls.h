@@ -213,6 +213,8 @@
 #define __NR_eventfd2                     (__NR_SYSCALL_BASE + 356)
 #define __NR_ARM_set_tls                  (__NR_SYSCALL_BASE + 983045)
 #define __NR_ARM_cacheflush               (__NR_SYSCALL_BASE + 983042)
+#define __NR_fanotify_init                (__NR_SYSCALL_BASE + 367)
+#define __NR_fanotify_mark                (__NR_SYSCALL_BASE + 368)
 #endif
 
 #ifdef __i386__
@@ -330,6 +332,8 @@
 #define __NR_utimensat                    (__NR_SYSCALL_BASE + 320)
 #define __NR_eventfd2                     (__NR_SYSCALL_BASE + 328)
 #define __NR_pipe2                        (__NR_SYSCALL_BASE + 331)
+#define __NR_fanotify_init                (__NR_SYSCALL_BASE + 338)
+#define __NR_fanotify_mark                (__NR_SYSCALL_BASE + 339)
 #endif
 
 #ifdef __mips__
@@ -462,6 +466,8 @@
 #define __NR_utimensat                    (__NR_SYSCALL_BASE + 316)
 #define __NR_eventfd2                     (__NR_SYSCALL_BASE + 325)
 #define __NR_pipe2                        (__NR_SYSCALL_BASE + 328)
+#define __NR_fanotify_init                (__NR_SYSCALL_BASE + 336)
+#define __NR_fanotify_mark                (__NR_SYSCALL_BASE + 337)
 #endif
 
 #endif
