@@ -203,5 +203,3 @@ syscall_src += arch-mips/syscalls/poll.S
 syscall_src += arch-mips/syscalls/eventfd.S
 syscall_src += arch-mips/syscalls/_flush_cache.S
 syscall_src += arch-mips/syscalls/syscall.S
-syscall_src += arch-mips/syscalls/fanotify_init.S
-syscall_src += arch-mips/syscalls/fanotify_mark.S
