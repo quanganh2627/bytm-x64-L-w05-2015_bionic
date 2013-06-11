@@ -12,9 +12,6 @@
 #include <sys/un.h>
 #include <linux/kct.h>
 
-/* prefix of properties used to filter events */
-#define	PROP_PREFIX	"dev.log"
-
 #define PKT_SIZE(Ev) (((struct ct_event*)(Ev))->attchmt_size + sizeof(struct ct_event))
 #define SK_NAME "\0crashtool_socket"
 
