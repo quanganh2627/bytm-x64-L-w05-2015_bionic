@@ -23,6 +23,12 @@ enum ct_ev_type {
 	CT_EV_STAT,
 	CT_EV_INFO,
 	CT_EV_ERROR,
+	/*
+	 * in ctmonitor, there is no difference between error and crash events.
+	 * if there's a real need for a crash event, special
+	 * processing is required on crashlogd. this is required as crash
+	 * events are used to give an idea of platform stability.
+	 */
 	CT_EV_CRASH,
 	CT_EV_LAST
 };
