@@ -63,8 +63,6 @@ extern void print_ct_event(struct ct_event *ev);
 extern int ct_stat_handler(struct ct_event *ev);
 extern int ct_crash_handler(struct ct_event *ev);
 
-extern struct ct_monitor_ctx ctm_ctx;
-
 extern ev_handler_t ev_handlers[CT_EV_LAST];
 
 #endif /* !CTM_H_ */

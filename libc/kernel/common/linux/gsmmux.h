@@ -42,6 +42,7 @@ struct gsm_config {
 #define GSMIOC_GETCONF _IOR('G', 0, struct gsm_config)
 #define GSMIOC_SETCONF _IOW('G', 1, struct gsm_config)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define GSMIOC_DEMUX _IO('G', 4)
 struct gsm_netconfig {
  unsigned int adaption;
  unsigned short protocol;

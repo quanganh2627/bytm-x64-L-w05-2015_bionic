@@ -265,6 +265,8 @@ libc_common_src_files := \
 	bionic/pututline.c \
 	bionic/realpath.c \
 	bionic/sched_getaffinity.c \
+	bionic/sched_setaffinity.c \
+	bionic/sched_affinity.c \
 	bionic/sched_getcpu.c \
 	bionic/sched_cpualloc.c \
 	bionic/sched_cpucount.c \

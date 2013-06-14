@@ -25,16 +25,22 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+#define _GNU_SOURCE 1
+
+#include <sched.h>
 #include <unistd.h>
 #include "pthread_internal.h"
 #include "bionic_pthread.h"
 #include "cpuacct.h"
 
 extern int  __fork(void);
+extern int __sched_get_affinity();
+extern int __sched_setaffinity(pid_t pid, size_t setsize, const cpu_set_t* set);
 
 int  fork(void)
 {
-    int  ret;
+    int  ret, hasAffinity;
+    cpu_set_t cpuSet;
 
     /* Posix mandates that the timers of a fork child process be
      * disarmed, but not destroyed. To avoid a race condition, we're
@@ -44,13 +50,17 @@ int  fork(void)
     __timer_table_start_stop(1);
     __bionic_atfork_run_prepare();
 
+    /* Get current thread affinity */
+    hasAffinity = __sched_get_affinity(&cpuSet);
+
     ret = __fork();
     if (ret != 0) {  /* not a child process */
         __timer_table_start_stop(0);
         __bionic_atfork_run_parent();
     } else {
         /* Adjusting the kernel id after a fork */
-        (void)__pthread_settid(pthread_self(), gettid());
+        pid_t tid = gettid();
+        (void)__pthread_settid(pthread_self(), tid);
 
         /*
          * Newly created process must update cpu accounting.
@@ -60,6 +70,11 @@ int  fork(void)
          */
         cpuacct_add(getuid());
         __bionic_atfork_run_child();
+
+        /* Restore affinity if parent has a limited affinity */
+        if (hasAffinity) {
+            __sched_setaffinity(tid, sizeof(cpuSet), &cpuSet);
+        }
     }
     return ret;
 }
