@@ -18,18 +18,6 @@
 
 #  define max(X, Y)  ((X) < (Y) ? (Y) : (X))
 
-#  define CRASH_TRIG_SUFFIX "_trigger"
-#  define INFO_TRIG_SUFFIX  "_infoevent"
-#  define STAT_TRIG_SUFFIX  "_trigger"
-
-#  define CRASH_DATA_SUFFIX "_data"
-#  define INFO_DATA_SUFFIX "_data"
-#  define STAT_DATA_SUFFIX "_data"
-
-#  define CRASH_PATH_DIR "/logs/cwscrash"
-#  define INFO_PATH_DIR "/logs/stats"
-#  define STAT_PATH_DIR "/logs/stats"
-
 extern int thread_should_stop;
 extern int sock_nl_fd;
 extern int sock_fd;
@@ -40,8 +28,6 @@ enum ctm_ev_pending {
 	EV_PENDING_USOCKET,
 	EV_PENDING_NONE
 };
-
-typedef int (*ev_handler_t)(struct ct_event *ev);
 
 /* ctm_netlink.c */
 extern int ctm_nl_init(void);
@@ -60,9 +46,6 @@ extern void print_all_attchmnt(struct ct_event *ev);
 extern void print_ct_event(struct ct_event *ev);
 
 /* ctm_handlers.c */
-extern int ct_stat_handler(struct ct_event *ev);
-extern int ct_crash_handler(struct ct_event *ev);
-
-extern ev_handler_t ev_handlers[CT_EV_LAST];
+extern int ct_handler(struct ct_event *ev, char *dir, char *dsuffix, char *tsuffix);
 
 #endif /* !CTM_H_ */
