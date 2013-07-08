@@ -2127,7 +2127,7 @@ L(46bytes):
 	movzwl	-46(%eax), %ecx
 	movzwl	-46(%edx), %ebx
 	subl	%ebx, %ecx
-	jz	L(memcmp16_exit)
+	jne	L(memcmp16_exit)
 L(44bytes):
 	movzwl	-44(%eax), %ecx
 	movzwl	-44(%edx), %ebx
