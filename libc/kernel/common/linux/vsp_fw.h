@@ -195,8 +195,6 @@ struct VssVp8encSequenceParameterBuffer {
     uint32_t max_intra_rate;
     uint32_t cyclic_intra_refresh;
     uint32_t concatenate_partitions;
-
-    struct VssProcPictureVP8 ref_frame_buffers[4];
 };
 
 struct VssVp8encEncodedFrame {
@@ -208,11 +206,10 @@ struct VssVp8encEncodedFrame {
     uint32_t segments;
     uint32_t quantizer[4];
     uint32_t frame_flags;
-    uint32_t ref_frame_flags;
     uint32_t partition_id;
     uint32_t buffer_level;
     uint32_t quality;
-    uint32_t surfaced_of_ref_frame[3];
+    uint32_t surfaceId_of_ref_frame[3];
     uint32_t reserved[15];
     uint32_t coded_data[1];
 };
@@ -240,7 +237,9 @@ struct VssVp8encPictureParameterBuffer {
 enum VssVp8encCommandType {
     VssVp8encSetSequenceParametersCommand = 123,
     VssVp8encEncodeFrameCommand,
-    VssVp8encEndOfSequenceCommand
+    VssVp8encEndOfSequenceCommand,
+    VssVp8encInit,
+    Vss_Sys_Ref_Frame_COMMAND
 };
 
 #endif
