@@ -502,9 +502,9 @@
 #include <android/api-level.h>
 
 #if defined(_FORTIFY_SOURCE) && _FORTIFY_SOURCE > 0 && defined(__OPTIMIZE__) && __OPTIMIZE__ > 0 && !defined(__clang__)
+/* Remove __attribute__ ((always_inline)) here to workaround inline failure for gcc 4.7 */
 #define __BIONIC_FORTIFY_INLINE \
     extern inline \
-    __attribute__ ((always_inline)) \
     __attribute__ ((gnu_inline)) \
     __attribute__ ((artificial))
 #define __BIONIC_FORTIFY_UNKNOWN_SIZE ((size_t) -1)

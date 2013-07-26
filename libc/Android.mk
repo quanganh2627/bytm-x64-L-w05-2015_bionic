@@ -450,6 +450,7 @@ libc_common_src_files += \
 	arch-x86/string/ssse3-strcpy-atom.S \
 	arch-x86/string/ssse3-memcmp-atom.S \
 	arch-x86/string/ssse3-wmemcmp-atom.S \
+	arch-x86/string/ssse3-memcmp16-atom.S \
 	arch-x86/string/ssse3-wcscat-atom.S \
 	arch-x86/string/ssse3-wcscpy-atom.S
 else
@@ -462,6 +463,7 @@ libc_common_src_files += \
 	arch-x86/string/strcat.S \
 	arch-x86/string/strcpy.S \
 	arch-x86/string/memcmp.S \
+	arch-x86/string/memcmp16.c \
 	string/strncat.c \
 	string/strncpy.c \
 	string/strlcat.c \
