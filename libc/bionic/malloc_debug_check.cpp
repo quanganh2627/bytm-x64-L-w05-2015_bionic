@@ -54,6 +54,7 @@
 
 /* libc.debug.malloc.backlog */
 extern unsigned int gMallocDebugBacklog;
+extern int gMallocDebugTrackLeak;
 extern int gMallocDebugLevel;
 
 #define MAX_BACKTRACE_DEPTH 16
@@ -478,7 +479,7 @@ extern "C" void *chk_calloc(int nmemb, size_t size) {
 
 static void ReportMemoryLeaks() {
   // We only track leaks at level 10.
-  if (gMallocDebugLevel != 10) {
+  if (gMallocDebugLevel != 10 || gMallocDebugTrackLeak != 1) {
     return;
   }
 
