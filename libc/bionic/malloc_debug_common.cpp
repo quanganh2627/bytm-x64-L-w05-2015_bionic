@@ -289,6 +289,8 @@ static void* libc_malloc_impl_handle = NULL;
 unsigned int gMallocDebugBacklog;
 #define BACKLOG_DEFAULT_LEN 100
 
+int gMallocDebugTrackLeak;
+
 /* The value of libc.debug.malloc. */
 int gMallocDebugLevel;
 
@@ -379,6 +381,11 @@ static void malloc_init_impl() {
             if (gMallocDebugBacklog == 0) {
                 gMallocDebugBacklog = BACKLOG_DEFAULT_LEN;
             }
+
+            if (__system_property_get("libc.debug.malloc.trackleak", env)) {
+                gMallocDebugTrackLeak = atoi(env);
+            }
+
             so_name = "/system/lib/libc_malloc_debug_leak.so";
             break;
         }
