@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Intel Corporation
+Copyright (c) 2010, Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,18 +28,16 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <stddef.h>
+#if defined(USE_SSSE3)
 
-/* Unoptimised version of __memcmp16 */
-int __memcmp16(const unsigned short *ptr1, const unsigned short *ptr2, size_t n)
-{
-  size_t i;
+# include "cache_wrapper.S"
+# undef __i686
+# define MEMCPY	memcpy
+# define USE_AS_MEMMOVE
+# include "ssse3-memcpy5.S"
 
-  for (i = 0; i < n; i++) {
-    if (*ptr1 != *ptr2)
-      return *ptr1 - *ptr2;
-    ptr1++;
-    ptr2++;
-  }
-  return 0;
-}
+#else
+
+# include "memcpy.S"
+
+#endif

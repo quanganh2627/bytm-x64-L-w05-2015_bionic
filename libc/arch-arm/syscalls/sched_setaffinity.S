@@ -2,13 +2,13 @@
 #include <machine/asm.h>
 #include <sys/linux-syscalls.h>
 
-ENTRY(fanotify_init)
+ENTRY(sched_setaffinity)
     .save   {r4, r7}
     stmfd   sp!, {r4, r7}
-    ldr     r7, =__NR_fanotify_init
+    ldr     r7, =__NR_sched_setaffinity
     swi     #0
     ldmfd   sp!, {r4, r7}
     movs    r0, r0
     bxpl    lr
     b       __set_syscall_errno
-END(fanotify_init)
+END(sched_setaffinity)

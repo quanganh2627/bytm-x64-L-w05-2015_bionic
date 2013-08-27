@@ -56,3 +56,4 @@ struct msm_idle_write_stats {
 #define MSM_IDLE_STATS_IOC_WRITE_STATS   _IOWR(MSM_IDLE_STATS_IOC_MAGIC, 2, struct msm_idle_write_stats)
 #endif
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+

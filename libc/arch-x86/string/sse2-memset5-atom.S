@@ -28,9 +28,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "cache.h"
-#undef __i686
-
 #ifndef L
 # define L(label)	.L##label
 #endif
@@ -139,13 +136,9 @@ __i686.get_pc_thunk.bx:
     jmp		*TABLE(,%ecx,4)
 #endif
 
-#ifndef MEMSET
-# define MEMSET memset
-#endif
-
 	.section .text.sse2,"ax",@progbits
 	ALIGN (4)
-ENTRY (MEMSET)
+ENTRY (sse2_memset5_atom)
 	ENTRANCE
 
 	movl	LEN(%esp), %ecx
@@ -918,4 +911,4 @@ L(aligned_16_15bytes):
 	SETRTNVAL
 	RETURN_END
 
-END (MEMSET)
+END (sse2_memset5_atom)
