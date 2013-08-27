@@ -52,9 +52,9 @@ typedef __s64 Elf64_Sxword;
 #define PT_SHLIB 5
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define PT_PHDR 6
-#define PT_TLS 7  
-#define PT_LOOS 0x60000000  
-#define PT_HIOS 0x6fffffff  
+#define PT_TLS 7
+#define PT_LOOS 0x60000000
+#define PT_HIOS 0x6fffffff
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define PT_LOPROC 0x70000000
 #define PT_HIPROC 0x7fffffff
@@ -322,7 +322,7 @@ typedef struct elf64_shdr {
  Elf64_Xword sh_entsize;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 } Elf64_Shdr;
-#define EI_MAG0 0  
+#define EI_MAG0 0
 #define EI_MAG1 1
 #define EI_MAG2 2
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
@@ -333,7 +333,7 @@ typedef struct elf64_shdr {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define EI_OSABI 7
 #define EI_PAD 8
-#define ELFMAG0 0x7f  
+#define ELFMAG0 0x7f
 #define ELFMAG1 'E'
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define ELFMAG2 'L'
@@ -341,15 +341,15 @@ typedef struct elf64_shdr {
 #define ELFMAG "\177ELF"
 #define SELFMAG 4
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define ELFCLASSNONE 0  
+#define ELFCLASSNONE 0
 #define ELFCLASS32 1
 #define ELFCLASS64 2
 #define ELFCLASSNUM 3
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define ELFDATANONE 0  
+#define ELFDATANONE 0
 #define ELFDATA2LSB 1
 #define ELFDATA2MSB 2
-#define EV_NONE 0  
+#define EV_NONE 0
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define EV_CURRENT 1
 #define EV_NUM 2
@@ -366,7 +366,7 @@ typedef struct elf64_shdr {
 #define NT_TASKSTRUCT 4
 #define NT_AUXV 6
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define NT_PRXFPREG 0x46e62b7f  
+#define NT_PRXFPREG 0x46e62b7f
 typedef struct elf32_note {
  Elf32_Word n_namesz;
  Elf32_Word n_descsz;

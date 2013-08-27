@@ -39,39 +39,13 @@
 #define	_STDIO_H_
 
 #include <sys/cdefs.h>
-#include <sys/_types.h>
+#include <sys/types.h>
 
-/* va_list and size_t must be defined by stdio.h according to Posix */
-#define __need___va_list
 #include <stdarg.h>
-
-/* note that this forces stddef.h to *only* define size_t */
-#define __need_size_t
 #include <stddef.h>
 
+#define __need_NULL
 #include <stddef.h>
-
-#if __BSD_VISIBLE || __POSIX_VISIBLE || __XPG_VISIBLE
-#include <sys/types.h>	/* XXX should be removed */
-#endif
-
-#ifndef	_SIZE_T_DEFINED_
-#define	_SIZE_T_DEFINED_
-typedef	unsigned long    size_t;
-#endif
-
-#ifndef	_OFF_T_DEFINED_
-#define	_OFF_T_DEFINED_
-typedef	long    off_t;
-#endif
-
-#ifndef NULL
-#ifdef 	__GNUG__
-#define	NULL	__null
-#else
-#define	NULL	0L
-#endif
-#endif
 
 #define	_FSTDIO			/* Define for new stdio with functions. */
 
@@ -249,6 +223,9 @@ off_t	 ftello(FILE *);
 size_t	 fwrite(const void *, size_t, size_t, FILE *);
 int	 getc(FILE *);
 int	 getchar(void);
+ssize_t	 getdelim(char ** __restrict, size_t * __restrict, int,
+	    FILE * __restrict);
+ssize_t	 getline(char ** __restrict, size_t * __restrict, FILE * __restrict);
 char	*gets(char *);
 #if __BSD_VISIBLE && !defined(__SYS_ERRLIST)
 #define __SYS_ERRLIST
@@ -480,15 +457,16 @@ int vfdprintf(int, const char*, __va_list)
 __END_DECLS
 #endif /* _GNU_SOURCE */
 
-#if defined(__BIONIC_FORTIFY_INLINE)
+#if defined(__BIONIC_FORTIFY)
+
+__BEGIN_DECLS
 
 __BIONIC_FORTIFY_INLINE
 __attribute__((__format__ (printf, 3, 0)))
 __attribute__((__nonnull__ (3)))
 int vsnprintf(char *dest, size_t size, const char *format, __va_list ap)
 {
-    return __builtin___vsnprintf_chk(dest, size, 0,
-        __builtin_object_size(dest, 0), format, ap);
+    return __builtin___vsnprintf_chk(dest, size, 0, __bos(dest), format, ap);
 }
 
 __BIONIC_FORTIFY_INLINE
@@ -496,8 +474,7 @@ __attribute__((__format__ (printf, 2, 0)))
 __attribute__((__nonnull__ (2)))
 int vsprintf(char *dest, const char *format, __va_list ap)
 {
-    return __builtin___vsprintf_chk(dest, 0,
-        __builtin_object_size(dest, 0), format, ap);
+    return __builtin___vsprintf_chk(dest, 0, __bos(dest), format, ap);
 }
 
 __BIONIC_FORTIFY_INLINE
@@ -506,7 +483,7 @@ __attribute__((__nonnull__ (3)))
 int snprintf(char *str, size_t size, const char *format, ...)
 {
     return __builtin___snprintf_chk(str, size, 0,
-        __builtin_object_size(str, 0), format, __builtin_va_arg_pack());
+        __bos(str), format, __builtin_va_arg_pack());
 }
 
 __BIONIC_FORTIFY_INLINE
@@ -515,7 +492,7 @@ __attribute__((__nonnull__ (2)))
 int sprintf(char *dest, const char *format, ...)
 {
     return __builtin___sprintf_chk(dest, 0,
-        __builtin_object_size(dest, 0), format, __builtin_va_arg_pack());
+        __bos(dest), format, __builtin_va_arg_pack());
 }
 
 extern char *__fgets_real(char *, int, FILE *)
@@ -529,7 +506,7 @@ extern char *__fgets_chk(char *, int, FILE *, size_t);
 __BIONIC_FORTIFY_INLINE
 char *fgets(char *dest, int size, FILE *stream)
 {
-    size_t bos = __builtin_object_size(dest, 0);
+    size_t bos = __bos(dest);
 
     // Compiler can prove, at compile time, that the passed in size
     // is always negative. Force a compiler error.
@@ -544,19 +521,21 @@ char *fgets(char *dest, int size, FILE *stream)
 
     // Compiler can prove, at compile time, that the passed in size
     // is always <= the actual object size. Don't call __fgets_chk
-    if (__builtin_constant_p(size) && (size <= bos)) {
+    if (__builtin_constant_p(size) && (size <= (int) bos)) {
         return __fgets_real(dest, size, stream);
     }
 
     // Compiler can prove, at compile time, that the passed in size
     // is always > the actual object size. Force a compiler error.
-    if (__builtin_constant_p(size) && (size > bos)) {
+    if (__builtin_constant_p(size) && (size > (int) bos)) {
         __fgets_too_big_error();
     }
 
     return __fgets_chk(dest, size, stream, bos);
 }
 
-#endif /* defined(__BIONIC_FORTIFY_INLINE) */
+__END_DECLS
+
+#endif /* defined(__BIONIC_FORTIFY) */
 
 #endif /* _STDIO_H_ */
