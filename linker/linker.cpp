@@ -440,7 +440,8 @@ dl_iterate_phdr(int (*cb)(dl_phdr_info *info, size_t size, void *data),
 
 #endif
 
-static Elf32_Sym* soinfo_elf_lookup(soinfo* si, unsigned hash, const char* name) {
+
+static Elf32_Sym* soinfo_elf_lookup(soinfo* si, unsigned hash, const char* name, bool jump_slot) {
     Elf32_Sym* symtab = si->symtab;
     const char* strtab = si->strtab;
 
@@ -455,7 +456,12 @@ static Elf32_Sym* soinfo_elf_lookup(soinfo* si, unsigned hash, const char* name)
         switch(ELF32_ST_BIND(s->st_info)){
         case STB_GLOBAL:
         case STB_WEAK:
-            if (s->st_shndx == SHN_UNDEF) {
+            /* symbol is undefined */
+            if (s->st_value == 0) {
+                continue;
+            }
+            /* For plt entry we go deeper into dependencies to find final symbol resolution */
+            if (jump_slot && s->st_shndx == SHN_UNDEF) {
                 continue;
             }
 
@@ -481,7 +487,8 @@ static unsigned elfhash(const char* _name) {
     return h;
 }
 
-static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, soinfo* needed[]) {
+static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, soinfo* needed[],
+        bool jump_slot) {
     unsigned elf_hash = elfhash(name);
     Elf32_Sym* s = NULL;
 
@@ -493,7 +500,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
          */
 
         if (si == somain) {
-            s = soinfo_elf_lookup(si, elf_hash, name);
+            s = soinfo_elf_lookup(si, elf_hash, name, jump_slot);
             if (s != NULL) {
                 *lsi = si;
                 goto done;
@@ -510,7 +517,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
             if (!si->has_DT_SYMBOLIC) {
                 DEBUG("%s: looking up %s in executable %s",
                       si->name, name, somain->name);
-                s = soinfo_elf_lookup(somain, elf_hash, name);
+                s = soinfo_elf_lookup(somain, elf_hash, name, jump_slot);
                 if (s != NULL) {
                     *lsi = somain;
                     goto done;
@@ -527,7 +534,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
              * and some the first non-weak definition.   This is system dependent.
              * Here we return the first definition found for simplicity.  */
 
-            s = soinfo_elf_lookup(si, elf_hash, name);
+            s = soinfo_elf_lookup(si, elf_hash, name, jump_slot);
             if (s != NULL) {
                 *lsi = si;
                 goto done;
@@ -541,7 +548,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
             if (si->has_DT_SYMBOLIC) {
                 DEBUG("%s: looking up %s in executable %s after local scope",
                       si->name, name, somain->name);
-                s = soinfo_elf_lookup(somain, elf_hash, name);
+                s = soinfo_elf_lookup(somain, elf_hash, name, jump_slot);
                 if (s != NULL) {
                     *lsi = somain;
                     goto done;
@@ -552,7 +559,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
 
     /* Next, look for it in the preloads list */
     for (int i = 0; gLdPreloads[i] != NULL; i++) {
-        s = soinfo_elf_lookup(gLdPreloads[i], elf_hash, name);
+        s = soinfo_elf_lookup(gLdPreloads[i], elf_hash, name, jump_slot);
         if (s != NULL) {
             *lsi = gLdPreloads[i];
             goto done;
@@ -562,7 +569,7 @@ static Elf32_Sym* soinfo_do_lookup(soinfo* si, const char* name, soinfo** lsi, s
     for (int i = 0; needed[i] != NULL; i++) {
         DEBUG("%s: looking up %s in %s",
               si->name, name, needed[i]->name);
-        s = soinfo_elf_lookup(needed[i], elf_hash, name);
+        s = soinfo_elf_lookup(needed[i], elf_hash, name, jump_slot);
         if (s != NULL) {
             *lsi = needed[i];
             goto done;
@@ -592,7 +599,7 @@ done:
  */
 Elf32_Sym* dlsym_handle_lookup(soinfo* si, const char* name)
 {
-    return soinfo_elf_lookup(si, elfhash(name), name);
+    return soinfo_elf_lookup(si, elfhash(name), name, false);
 }
 
 /* This is used by dlsym(3) to performs a global symbol lookup. If the
@@ -609,7 +616,7 @@ Elf32_Sym* dlsym_linear_lookup(const char* name, soinfo** found, soinfo* start) 
 
   Elf32_Sym* s = NULL;
   for (soinfo* si = start; (s == NULL) && (si != NULL); si = si->next) {
-    s = soinfo_elf_lookup(si, elf_hash, name);
+    s = soinfo_elf_lookup(si, elf_hash, name, false);
     if (s != NULL) {
       *found = si;
       break;
@@ -857,6 +864,14 @@ static int soinfo_relocate(soinfo* si, Elf32_Rel* rel, unsigned count,
 
     for (size_t idx = 0; idx < count; ++idx, ++rel) {
         unsigned type = ELF32_R_TYPE(rel->r_info);
+        bool jump_slot = type ==
+#if defined(ANDROID_ARM_LINKER)
+        R_ARM_JUMP_SLOT;
+#elif defined(ANDROID_X86_LINKER)
+        R_386_JMP_SLOT;
+#else
+        false;
+#endif
         unsigned sym = ELF32_R_SYM(rel->r_info);
         Elf32_Addr reloc = static_cast<Elf32_Addr>(rel->r_offset + si->load_bias);
         Elf32_Addr sym_addr = 0;
@@ -868,7 +883,7 @@ static int soinfo_relocate(soinfo* si, Elf32_Rel* rel, unsigned count,
         }
         if (sym != 0) {
             sym_name = (char *)(strtab + symtab[sym].st_name);
-            s = soinfo_do_lookup(si, sym_name, &lsi, needed);
+            s = soinfo_do_lookup(si, sym_name, &lsi, needed, jump_slot);
             if (s == NULL) {
                 /* We only allow an undefined symbol if this is a weak
                    reference..   */
@@ -1052,7 +1067,7 @@ static int soinfo_relocate(soinfo* si, Elf32_Rel* rel, unsigned count,
             MARK(rel->r_offset);
             TRACE_TYPE(RELO, "RELO %08x <- %d @ %08x %s", reloc, s->st_size, sym_addr, sym_name);
             if (reloc == sym_addr) {
-                Elf32_Sym *src = soinfo_do_lookup(NULL, sym_name, &lsi, needed);
+                Elf32_Sym *src = soinfo_do_lookup(NULL, sym_name, &lsi, needed, true);
 
                 if (src == NULL) {
                     DL_ERR("%s R_ARM_COPY relocation source cannot be resolved", si->name);
@@ -1128,7 +1143,7 @@ static bool mips_relocate_got(soinfo* si, soinfo* needed[]) {
 
         /* This is an undefined reference... try to locate it */
         sym_name = si->strtab + sym->st_name;
-        s = soinfo_do_lookup(si, sym_name, &lsi, needed);
+        s = soinfo_do_lookup(si, sym_name, &lsi, needed, true);
         if (s == NULL) {
             /* We only allow an undefined symbol if this is a weak
                reference..   */
