@@ -85,6 +85,7 @@ struct hdr_t {
     uint32_t tag;
     hdr_t* prev;
     hdr_t* next;
+    hdr_t* orig;
     intptr_t bt[MAX_BACKTRACE_DEPTH];
     int bt_depth;
     intptr_t freed_bt[MAX_BACKTRACE_DEPTH];
@@ -107,6 +108,16 @@ static inline void* user(hdr_t* hdr) {
 
 static inline hdr_t* meta(void* user) {
     return reinterpret_cast<hdr_t*>(user) - 1;
+}
+
+static inline size_t hdr_t_offset() {
+    size_t align_mask = MALLOC_ALIGNMENT - 1;
+    return (sizeof(hdr_t) & align_mask) == 0 ? 0 :
+            (MALLOC_ALIGNMENT - (sizeof(hdr_t) & align_mask)) & align_mask;
+}
+
+static inline hdr_t* align_hdr_t(hdr_t* hdr) {
+    return reinterpret_cast<hdr_t*>(reinterpret_cast<char*>(hdr) + hdr_t_offset());
 }
 
 static unsigned num;
@@ -353,7 +364,7 @@ static inline void add_to_backlog(hdr_t *hdr) {
     if (hdr->tag == ALLOC_NONCHK_TAG)
     {
         hdr->tag = 0;
-        dlfree(hdr);
+        dlfree(hdr->orig);
         return;
     }
     ScopedPthreadMutexLocker locker(&backlog_lock);
@@ -365,16 +376,19 @@ static inline void add_to_backlog(hdr_t *hdr) {
     while (backlog_num > malloc_double_free_backlog) {
         hdr_t *gone = backlog_tail;
         del_from_backlog_locked(gone);
-        dlfree(gone);
+        dlfree(gone->orig);
     }
 }
 
 extern "C" void* chk_malloc(size_t size) {
 //  log_message("%s: %s\n", __FILE__, __FUNCTION__);
 
-    hdr_t* hdr = static_cast<hdr_t*>(dlmalloc(sizeof(hdr_t) + size + sizeof(ftr_t)));
+    hdr_t* hdr = static_cast<hdr_t*>(dlmalloc(sizeof(hdr_t) + hdr_t_offset() + size + sizeof(ftr_t)));
     if (hdr) {
+        hdr_t* hdr_orig = hdr;
+        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
+        hdr->orig = hdr_orig;
         fill_meta(hdr, size);
         add(hdr);
         return user(hdr);
@@ -384,7 +398,7 @@ extern "C" void* chk_malloc(size_t size) {
 
 extern "C" void* chk_memalign(size_t alignment, size_t bytes)
 {
-    hdr_t * hdr;
+    hdr_t * hdr, * hdr_orig;
     size_t size = 0;
     intptr_t ptr = 0;
     size_t remainder = 0;
@@ -406,6 +420,7 @@ extern "C" void* chk_memalign(size_t alignment, size_t bytes)
         size = sizeof(struct hdr_t) + bytes + sizeof(struct hdr_t) + sizeof(struct ftr_t);
 
     hdr = static_cast<hdr_t*>(dlmalloc(size));
+    hdr_orig = hdr;
     if (hdr) {
         if (alignment >= sizeof(struct hdr_t)) {
             ptr = (intptr_t)hdr;
@@ -422,6 +437,7 @@ extern "C" void* chk_memalign(size_t alignment, size_t bytes)
         }
         hdr = static_cast<hdr_t*>((void*)(ptr - sizeof(struct hdr_t)));
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
+        hdr->orig = hdr_orig;
         fill_meta(hdr, bytes);
         add(hdr);
         return  user(hdr);
@@ -520,9 +536,12 @@ extern "C" void *chk_realloc(void *ptr, size_t size) {
 
     hdr->freed_bt_depth = get_backtrace(hdr->freed_bt,
                                   MAX_BACKTRACE_DEPTH);
-    hdr = static_cast<hdr_t*>(dlrealloc(hdr, sizeof(hdr_t) + size + sizeof(ftr_t)));
+    hdr = static_cast<hdr_t*>(dlrealloc(hdr->orig, sizeof(hdr_t) + hdr_t_offset() + size + sizeof(ftr_t)));
     if (hdr) {
+        hdr_t* hdr_orig = hdr;
+        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
+        hdr->orig = hdr_orig;
         fill_meta(hdr, size);
         add(hdr);
         return user(hdr);
@@ -534,10 +553,13 @@ extern "C" void *chk_realloc(void *ptr, size_t size) {
 extern "C" void *chk_calloc(int nmemb, size_t size) {
 //  log_message("%s: %s\n", __FILE__, __FUNCTION__);
     size_t total_size = nmemb * size;
-    hdr_t* hdr = static_cast<hdr_t*>(dlcalloc(1, sizeof(hdr_t) + total_size + sizeof(ftr_t)));
+    hdr_t* hdr = static_cast<hdr_t*>(dlcalloc(1, sizeof(hdr_t) + hdr_t_offset() + total_size + sizeof(ftr_t)));
     if (hdr) {
+        hdr_t* hdr_orig = hdr;
+        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(
                             hdr->bt, MAX_BACKTRACE_DEPTH);
+        hdr->orig = hdr_orig;
         fill_meta(hdr, total_size);
         add(hdr);
         return user(hdr);
@@ -552,7 +574,7 @@ static void heaptracker_free_backlog_memory() {
     while (backlog_head) {
         del = backlog_tail;
         del_from_backlog_locked(del);
-        dlfree(del);
+        dlfree(del->orig);
     }
 }
 
@@ -574,7 +596,7 @@ static void heaptracker_free_leaked_memory() {
                         user(del), del->size);
             print_backtrace(del->bt, del->bt_depth);
         }
-        dlfree(del);
+        dlfree(del->orig);
     }
 }
 
