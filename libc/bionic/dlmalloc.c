@@ -84,21 +84,21 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
                     line, (unsigned int)m->least_addr, (unsigned int)p);
 
   msegmentptr sp = &m->seg;
+  __libc_format_log(ANDROID_LOG_FATAL, "libc", "\t    base    :  size");
   for (int i = 0; sp != NULL; i++) {
     __libc_format_log(ANDROID_LOG_FATAL, "libc",
-                      "\t    base    :  size\n"
                       "\t%03d %08x:  %d",
                       i, (unsigned int)sp->base, sp->size);
     sp = sp->next;
   }
 
   __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-  if (segment_holding(m, (char*)p) != 0
+  if (p != NULL && segment_holding(m, (char*)p) != 0
       && segment_holding(m, ((char *)p + sizeof(mchunk) - 1)) != 0) {
     __bionic_heap_state_dump(p,"p");
 
     __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-    if (segment_holding(m, (char*)p->fd) != 0
+    if (p->fd != NULL && segment_holding(m, (char*)p->fd) != 0
         && segment_holding(m, ((char *)p->fd + sizeof(mchunk) - 1)) != 0) {
       __bionic_heap_state_dump(p->fd, "p->fd");
     }
@@ -108,7 +108,7 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
     }
 
     __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-    if (segment_holding(m, (char*)(p->bk)) != 0
+    if (p->bk != NULL && segment_holding(m, (char*)(p->bk)) != 0
         && segment_holding(m, ((char *)p->bk + sizeof(mchunk) - 1)) != 0)
       __bionic_heap_state_dump(p->bk, "p->bk");
     else  {
@@ -121,7 +121,7 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
     if (!pinuse(p)) {
       size_t prevsize = p->prev_foot;
       mchunkptr prev = chunk_minus_offset(p, prevsize);
-      if (segment_holding(m, (char*)prev) != 0
+      if (prev != NULL && segment_holding(m, (char*)prev) != 0
           && segment_holding(m, ((char *)prev + sizeof(mchunk) - 1)) != 0) {
         __bionic_heap_state_dump(prev, "prev");
       } else {
@@ -150,7 +150,7 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
     if((psize >> SMALLBIN_SHIFT) >= NSMALLBINS) {
       tbinptr q = (tbinptr)p;
       __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-      if (segment_holding(m, (char*)(q->child[0])) != 0
+      if (q->child[0] != NULL && segment_holding(m, (char*)(q->child[0])) != 0
           && segment_holding(m, ((char *)q->child[0] + sizeof(tchunk) - 1)) != 0)
         __bionic_heap_state_dump((mchunkptr)q->child[0], "p->child[0]");
       else {
@@ -159,7 +159,7 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
       }
 
       __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-      if (segment_holding(m, (char*)(q->child[1])) != 0
+      if (q->child[1] != NULL && segment_holding(m, (char*)(q->child[1])) != 0
           && segment_holding(m, ((char *)q->child[1] + sizeof(tchunk) - 1)) != 0)
         __bionic_heap_state_dump((mchunkptr)q->child[1], "p->child[1]");
       else {
@@ -168,7 +168,7 @@ static void __bionic_heap_state_debug(void* m_ori, void* p_ori, int line) {
       }
 
       __libc_format_log(ANDROID_LOG_FATAL, "libc", STR_DUMPING_HEAP);
-      if (segment_holding(m, (char*)(q->parent)) != 0
+      if (q->parent != NULL && segment_holding(m, (char*)(q->parent)) != 0
           && segment_holding(m, ((char *)q->parent + sizeof(tchunk) - 1)) != 0)
         __bionic_heap_state_dump((mchunkptr)q->parent, "p->parent");
       else {
