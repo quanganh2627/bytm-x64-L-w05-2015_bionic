@@ -31,17 +31,17 @@
 #define VID_TYPE_TUNER 2
 #define VID_TYPE_TELETEXT 4
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VID_TYPE_OVERLAY 8  
+#define VID_TYPE_OVERLAY 8
 #define VID_TYPE_CHROMAKEY 16
 #define VID_TYPE_CLIPPING 32
 #define VID_TYPE_FRAMERAM 64
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VID_TYPE_SCALES 128  
+#define VID_TYPE_SCALES 128
 #define VID_TYPE_MONOCHROME 256
 #define VID_TYPE_SUBCAPTURE 512
 #define VID_TYPE_MPEG_DECODER 1024
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VID_TYPE_MPEG_ENCODER 2048  
+#define VID_TYPE_MPEG_ENCODER 2048
 #define VID_TYPE_MJPEG_DECODER 4096
 #define VID_TYPE_MJPEG_ENCODER 8192
 #define v4l2_fourcc(a, b, c, d)  ((__u32)(a) | ((__u32)(b) << 8) | ((__u32)(c) << 16) | ((__u32)(d) << 24))
@@ -141,17 +141,17 @@ struct v4l2_capability {
  __u32 reserved[3];
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_CAP_VIDEO_CAPTURE 0x00000001  
+#define V4L2_CAP_VIDEO_CAPTURE 0x00000001
 #define V4L2_CAP_VIDEO_OUTPUT 0x00000002
 #define V4L2_CAP_VIDEO_OVERLAY 0x00000004
 #define V4L2_CAP_VBI_CAPTURE 0x00000010
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_CAP_VBI_OUTPUT 0x00000020  
+#define V4L2_CAP_VBI_OUTPUT 0x00000020
 #define V4L2_CAP_SLICED_VBI_CAPTURE 0x00000040
 #define V4L2_CAP_SLICED_VBI_OUTPUT 0x00000080
 #define V4L2_CAP_RDS_CAPTURE 0x00000100
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_CAP_VIDEO_OUTPUT_OVERLAY 0x00000200  
+#define V4L2_CAP_VIDEO_OUTPUT_OVERLAY 0x00000200
 #define V4L2_CAP_HW_FREQ_SEEK 0x00000400
 #define V4L2_CAP_RDS_OUTPUT 0x00000800
 #define V4L2_CAP_VIDEO_CAPTURE_MPLANE 0x00001000
@@ -308,7 +308,7 @@ struct v4l2_pix_format {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define V4L2_PIX_FMT_KONICA420 v4l2_fourcc('K', 'O', 'N', 'I')
 #define V4L2_PIX_FMT_JPGL v4l2_fourcc('J', 'P', 'G', 'L')
-#define V4L2_PIX_FMT_SE401 v4l2_fourcc('S', '4', '0', '1')  
+#define V4L2_PIX_FMT_SE401 v4l2_fourcc('S', '4', '0', '1')
 struct v4l2_fmtdesc {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  __u32 index;
@@ -401,7 +401,7 @@ struct v4l2_timecode {
 #define V4L2_TC_TYPE_50FPS 4
 #define V4L2_TC_TYPE_60FPS 5
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_TC_FLAG_DROPFRAME 0x0001  
+#define V4L2_TC_FLAG_DROPFRAME 0x0001
 #define V4L2_TC_FLAG_COLORFRAME 0x0002
 #define V4L2_TC_USERBITS_field 0x000C
 #define V4L2_TC_USERBITS_USERDEFINED 0x0000
@@ -421,7 +421,7 @@ struct v4l2_jpegcompression {
 #define V4L2_JPEG_MARKER_DQT (1<<4)
 #define V4L2_JPEG_MARKER_DRI (1<<5)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_JPEG_MARKER_COM (1<<6)  
+#define V4L2_JPEG_MARKER_COM (1<<6)
 #define V4L2_JPEG_MARKER_APP (1<<7)
 };
 struct v4l2_requestbuffers {
@@ -471,7 +471,7 @@ struct v4l2_buffer {
 #define V4L2_BUF_FLAG_MAPPED 0x0001
 #define V4L2_BUF_FLAG_QUEUED 0x0002
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_BUF_FLAG_DONE 0x0004  
+#define V4L2_BUF_FLAG_DONE 0x0004
 #define V4L2_BUF_FLAG_KEYFRAME 0x0008
 #define V4L2_BUF_FLAG_PFRAME 0x0010
 #define V4L2_BUF_FLAG_BFRAME 0x0020
@@ -536,7 +536,7 @@ struct v4l2_captureparm {
 };
 #define V4L2_MODE_HIGHQUALITY 0x0001
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_CAP_TIMEPERFRAME 0x1000  
+#define V4L2_CAP_TIMEPERFRAME 0x1000
 struct v4l2_outputparm {
  __u32 capability;
  __u32 outputmode;
@@ -704,11 +704,11 @@ struct v4l2_bt_timings {
 #define V4L2_DV_INTERLACED 1
 #define V4L2_DV_VSYNC_POS_POL 0x00000001
 #define V4L2_DV_HSYNC_POS_POL 0x00000002
-#define V4L2_DV_BT_STD_CEA861 (1 << 0)  
+#define V4L2_DV_BT_STD_CEA861 (1 << 0)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_DV_BT_STD_DMT (1 << 1)  
-#define V4L2_DV_BT_STD_CVT (1 << 2)  
-#define V4L2_DV_BT_STD_GTF (1 << 3)  
+#define V4L2_DV_BT_STD_DMT (1 << 1)
+#define V4L2_DV_BT_STD_CVT (1 << 2)
+#define V4L2_DV_BT_STD_GTF (1 << 3)
 #define V4L2_DV_FL_REDUCED_BLANKING (1 << 0)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define V4L2_DV_FL_CAN_REDUCE_FPS (1 << 1)
@@ -849,9 +849,9 @@ struct v4l2_ext_controls {
 #define V4L2_CTRL_CLASS_FM_TX 0x009b0000
 #define V4L2_CTRL_CLASS_FLASH 0x009c0000
 #define V4L2_CTRL_CLASS_JPEG 0x009d0000
-#define V4L2_CTRL_CLASS_IMAGE_SOURCE 0x009e0000  
+#define V4L2_CTRL_CLASS_IMAGE_SOURCE 0x009e0000
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define V4L2_CTRL_CLASS_IMAGE_PROC 0x009f0000  
+#define V4L2_CTRL_CLASS_IMAGE_PROC 0x009f0000
 #define V4L2_CTRL_ID_MASK (0x0fffffff)
 #define V4L2_CTRL_ID2CLASS(id) ((id) & 0x0fff0000UL)
 #define V4L2_CTRL_DRIVER_PRIV(id) (((id) & 0xffff) >= 0x1000)
@@ -1677,532 +1677,533 @@ enum v4l2_jpeg_chroma_subsampling {
 #define V4L2_CID_LINK_FREQ (V4L2_CID_IMAGE_PROC_CLASS_BASE + 1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define V4L2_CID_PIXEL_RATE (V4L2_CID_IMAGE_PROC_CLASS_BASE + 2)
+#define V4L2_CID_TEST_PATTERN (V4L2_CID_IMAGE_PROC_CLASS_BASE + 3)
 struct v4l2_tuner {
  __u32 index;
- __u8 name[32];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u8 name[32];
  __u32 type;
  __u32 capability;
  __u32 rangelow;
- __u32 rangehigh;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 rangehigh;
  __u32 rxsubchans;
  __u32 audmode;
  __s32 signal;
- __s32 afc;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __s32 afc;
  __u32 reserved[4];
 };
 struct v4l2_modulator {
- __u32 index;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 index;
  __u8 name[32];
  __u32 capability;
  __u32 rangelow;
- __u32 rangehigh;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 rangehigh;
  __u32 txsubchans;
  __u32 reserved[4];
 };
-#define V4L2_TUNER_CAP_LOW 0x0001
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_CAP_LOW 0x0001
 #define V4L2_TUNER_CAP_NORM 0x0002
 #define V4L2_TUNER_CAP_HWSEEK_BOUNDED 0x0004
 #define V4L2_TUNER_CAP_HWSEEK_WRAP 0x0008
-#define V4L2_TUNER_CAP_STEREO 0x0010
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_CAP_STEREO 0x0010
 #define V4L2_TUNER_CAP_LANG2 0x0020
 #define V4L2_TUNER_CAP_SAP 0x0020
 #define V4L2_TUNER_CAP_LANG1 0x0040
-#define V4L2_TUNER_CAP_RDS 0x0080
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_CAP_RDS 0x0080
 #define V4L2_TUNER_CAP_RDS_BLOCK_IO 0x0100
 #define V4L2_TUNER_CAP_RDS_CONTROLS 0x0200
 #define V4L2_TUNER_CAP_FREQ_BANDS 0x0400
-#define V4L2_TUNER_CAP_HWSEEK_PROG_LIM 0x0800
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_CAP_HWSEEK_PROG_LIM 0x0800
 #define V4L2_TUNER_SUB_MONO 0x0001
 #define V4L2_TUNER_SUB_STEREO 0x0002
 #define V4L2_TUNER_SUB_LANG2 0x0004
-#define V4L2_TUNER_SUB_SAP 0x0004
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_SUB_SAP 0x0004
 #define V4L2_TUNER_SUB_LANG1 0x0008
 #define V4L2_TUNER_SUB_RDS 0x0010
 #define V4L2_TUNER_MODE_MONO 0x0000
-#define V4L2_TUNER_MODE_STEREO 0x0001
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_MODE_STEREO 0x0001
 #define V4L2_TUNER_MODE_LANG2 0x0002
 #define V4L2_TUNER_MODE_SAP 0x0002
 #define V4L2_TUNER_MODE_LANG1 0x0003
-#define V4L2_TUNER_MODE_LANG1_LANG2 0x0004
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_TUNER_MODE_LANG1_LANG2 0x0004
 struct v4l2_frequency {
  __u32 tuner;
  __u32 type;
- __u32 frequency;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 frequency;
  __u32 reserved[8];
 };
 #define V4L2_BAND_MODULATION_VSB (1 << 1)
-#define V4L2_BAND_MODULATION_FM (1 << 2)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_BAND_MODULATION_FM (1 << 2)
 #define V4L2_BAND_MODULATION_AM (1 << 3)
 struct v4l2_frequency_band {
  __u32 tuner;
- __u32 type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 type;
  __u32 index;
  __u32 capability;
  __u32 rangelow;
- __u32 rangehigh;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 rangehigh;
  __u32 modulation;
  __u32 reserved[9];
 };
-struct v4l2_hw_freq_seek {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_hw_freq_seek {
  __u32 tuner;
  __u32 type;
  __u32 seek_upward;
- __u32 wrap_around;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 wrap_around;
  __u32 spacing;
  __u32 rangelow;
  __u32 rangehigh;
- __u32 reserved[5];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 reserved[5];
 };
 struct v4l2_rds_data {
  __u8 lsb;
- __u8 msb;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u8 msb;
  __u8 block;
 } __attribute__ ((packed));
 #define V4L2_RDS_BLOCK_MSK 0x7
-#define V4L2_RDS_BLOCK_A 0
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_RDS_BLOCK_A 0
 #define V4L2_RDS_BLOCK_B 1
 #define V4L2_RDS_BLOCK_C 2
 #define V4L2_RDS_BLOCK_D 3
-#define V4L2_RDS_BLOCK_C_ALT 4
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_RDS_BLOCK_C_ALT 4
 #define V4L2_RDS_BLOCK_INVALID 7
 #define V4L2_RDS_BLOCK_CORRECTED 0x40
 #define V4L2_RDS_BLOCK_ERROR 0x80
-struct v4l2_audio {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_audio {
  __u32 index;
  __u8 name[32];
  __u32 capability;
- __u32 mode;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 mode;
  __u32 reserved[2];
 };
 #define V4L2_AUDCAP_STEREO 0x00001
-#define V4L2_AUDCAP_AVL 0x00002
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_AUDCAP_AVL 0x00002
 #define V4L2_AUDMODE_AVL 0x00001
 struct v4l2_audioout {
  __u32 index;
- __u8 name[32];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u8 name[32];
  __u32 capability;
  __u32 mode;
  __u32 reserved[2];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define V4L2_ENC_IDX_FRAME_I (0)
 #define V4L2_ENC_IDX_FRAME_P (1)
 #define V4L2_ENC_IDX_FRAME_B (2)
-#define V4L2_ENC_IDX_FRAME_MASK (0xf)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_ENC_IDX_FRAME_MASK (0xf)
 struct v4l2_enc_idx_entry {
  __u64 offset;
  __u64 pts;
- __u32 length;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 length;
  __u32 flags;
  __u32 reserved[2];
 };
-#define V4L2_ENC_IDX_ENTRIES (64)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_ENC_IDX_ENTRIES (64)
 struct v4l2_enc_idx {
  __u32 entries;
  __u32 entries_cap;
- __u32 reserved[4];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 reserved[4];
  struct v4l2_enc_idx_entry entry[V4L2_ENC_IDX_ENTRIES];
 };
 #define V4L2_ENC_CMD_START (0)
-#define V4L2_ENC_CMD_STOP (1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_ENC_CMD_STOP (1)
 #define V4L2_ENC_CMD_PAUSE (2)
 #define V4L2_ENC_CMD_RESUME (3)
 #define V4L2_ENC_CMD_STOP_AT_GOP_END (1 << 0)
-struct v4l2_encoder_cmd {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_encoder_cmd {
  __u32 cmd;
  __u32 flags;
  union {
- struct {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct {
  __u32 data[8];
  } raw;
  };
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define V4L2_DEC_CMD_START (0)
 #define V4L2_DEC_CMD_STOP (1)
 #define V4L2_DEC_CMD_PAUSE (2)
-#define V4L2_DEC_CMD_RESUME (3)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_DEC_CMD_RESUME (3)
 #define V4L2_DEC_CMD_START_MUTE_AUDIO (1 << 0)
 #define V4L2_DEC_CMD_PAUSE_TO_BLACK (1 << 0)
 #define V4L2_DEC_CMD_STOP_TO_BLACK (1 << 0)
-#define V4L2_DEC_CMD_STOP_IMMEDIATELY (1 << 1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_DEC_CMD_STOP_IMMEDIATELY (1 << 1)
 #define V4L2_DEC_START_FMT_NONE (0)
 #define V4L2_DEC_START_FMT_GOP (1)
 struct v4l2_decoder_cmd {
- __u32 cmd;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 cmd;
  __u32 flags;
  union {
  struct {
- __u64 pts;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u64 pts;
  } stop;
  struct {
  __s32 speed;
- __u32 format;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 format;
  } start;
  struct {
  __u32 data[16];
- } raw;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ } raw;
  };
 };
 struct v4l2_vbi_format {
- __u32 sampling_rate;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 sampling_rate;
  __u32 offset;
  __u32 samples_per_line;
  __u32 sample_format;
- __s32 start[2];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __s32 start[2];
  __u32 count[2];
  __u32 flags;
  __u32 reserved[2];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define V4L2_VBI_UNSYNC (1 << 0)
 #define V4L2_VBI_INTERLACED (1 << 1)
 struct v4l2_sliced_vbi_format {
- __u16 service_set;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u16 service_set;
  __u16 service_lines[2][24];
  __u32 io_size;
  __u32 reserved[2];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define V4L2_SLICED_TELETEXT_B (0x0001)
 #define V4L2_SLICED_VPS (0x0400)
 #define V4L2_SLICED_CAPTION_525 (0x1000)
-#define V4L2_SLICED_WSS_625 (0x4000)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_SLICED_WSS_625 (0x4000)
 #define V4L2_SLICED_VBI_525 (V4L2_SLICED_CAPTION_525)
 #define V4L2_SLICED_VBI_625 (V4L2_SLICED_TELETEXT_B | V4L2_SLICED_VPS | V4L2_SLICED_WSS_625)
 struct v4l2_sliced_vbi_cap {
- __u16 service_set;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u16 service_set;
  __u16 service_lines[2][24];
  __u32 type;
  __u32 reserved[3];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct v4l2_sliced_vbi_data {
  __u32 id;
  __u32 field;
- __u32 line;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 line;
  __u32 reserved;
  __u8 data[48];
 };
-#define V4L2_MPEG_VBI_IVTV_TELETEXT_B (1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_MPEG_VBI_IVTV_TELETEXT_B (1)
 #define V4L2_MPEG_VBI_IVTV_CAPTION_525 (4)
 #define V4L2_MPEG_VBI_IVTV_WSS_625 (5)
 #define V4L2_MPEG_VBI_IVTV_VPS (7)
-struct v4l2_mpeg_vbi_itv0_line {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_mpeg_vbi_itv0_line {
  __u8 id;
  __u8 data[42];
 } __attribute__ ((packed));
-struct v4l2_mpeg_vbi_itv0 {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_mpeg_vbi_itv0 {
  __le32 linemask[2];
  struct v4l2_mpeg_vbi_itv0_line line[35];
 } __attribute__ ((packed));
-struct v4l2_mpeg_vbi_ITV0 {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_mpeg_vbi_ITV0 {
  struct v4l2_mpeg_vbi_itv0_line line[36];
 } __attribute__ ((packed));
 #define V4L2_MPEG_VBI_IVTV_MAGIC0 "itv0"
-#define V4L2_MPEG_VBI_IVTV_MAGIC1 "ITV0"
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_MPEG_VBI_IVTV_MAGIC1 "ITV0"
 struct v4l2_mpeg_vbi_fmt_ivtv {
  __u8 magic[4];
  union {
- struct v4l2_mpeg_vbi_itv0 itv0;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct v4l2_mpeg_vbi_itv0 itv0;
  struct v4l2_mpeg_vbi_ITV0 ITV0;
  };
 } __attribute__ ((packed));
-struct v4l2_plane_pix_format {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_plane_pix_format {
  __u32 sizeimage;
  __u16 bytesperline;
  __u16 reserved[7];
-} __attribute__ ((packed));
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+} __attribute__ ((packed));
 struct v4l2_pix_format_mplane {
  __u32 width;
  __u32 height;
- __u32 pixelformat;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 pixelformat;
  __u32 field;
  __u32 colorspace;
  struct v4l2_plane_pix_format plane_fmt[VIDEO_MAX_PLANES];
- __u8 num_planes;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u8 num_planes;
  __u8 reserved[11];
 } __attribute__ ((packed));
 struct v4l2_format {
- __u32 type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 type;
  union {
  struct v4l2_pix_format pix;
  struct v4l2_pix_format_mplane pix_mp;
- struct v4l2_window win;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct v4l2_window win;
  struct v4l2_vbi_format vbi;
  struct v4l2_sliced_vbi_format sliced;
  __u8 raw_data[200];
- } fmt;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ } fmt;
 };
 struct v4l2_streamparm {
  __u32 type;
- union {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ union {
  struct v4l2_captureparm capture;
  struct v4l2_outputparm output;
  __u8 raw_data[200];
- } parm;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ } parm;
 };
 #define V4L2_EVENT_ALL 0
 #define V4L2_EVENT_VSYNC 1
-#define V4L2_EVENT_EOS 2
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_EVENT_EOS 2
 #define V4L2_EVENT_CTRL 3
 #define V4L2_EVENT_FRAME_SYNC 4
 #define V4L2_EVENT_PRIVATE_START 0x08000000
-struct v4l2_event_vsync {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_event_vsync {
  __u8 field;
 } __attribute__ ((packed));
 #define V4L2_EVENT_CTRL_CH_VALUE (1 << 0)
-#define V4L2_EVENT_CTRL_CH_FLAGS (1 << 1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_EVENT_CTRL_CH_FLAGS (1 << 1)
 struct v4l2_event_ctrl {
  __u32 changes;
  __u32 type;
- union {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ union {
  __s32 value;
  __s64 value64;
  };
- __u32 flags;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 flags;
  __s32 minimum;
  __s32 maximum;
  __s32 step;
- __s32 default_value;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __s32 default_value;
 };
 struct v4l2_event_frame_sync {
  __u32 frame_sequence;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct v4l2_event {
  __u32 type;
  union {
- struct v4l2_event_vsync vsync;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct v4l2_event_vsync vsync;
  struct v4l2_event_ctrl ctrl;
  struct v4l2_event_frame_sync frame_sync;
  __u8 data[64];
- } u;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ } u;
  __u32 pending;
  __u32 sequence;
  struct timespec timestamp;
- __u32 id;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 id;
  __u32 reserved[8];
 };
 #define V4L2_EVENT_SUB_FL_SEND_INITIAL (1 << 0)
-#define V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK (1 << 1)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK (1 << 1)
 struct v4l2_event_subscription {
  __u32 type;
  __u32 id;
- __u32 flags;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 flags;
  __u32 reserved[5];
 };
 #define V4L2_CHIP_MATCH_HOST 0
-#define V4L2_CHIP_MATCH_I2C_DRIVER 1
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define V4L2_CHIP_MATCH_I2C_DRIVER 1
 #define V4L2_CHIP_MATCH_I2C_ADDR 2
 #define V4L2_CHIP_MATCH_AC97 3
 struct v4l2_dbg_match {
- __u32 type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 type;
  union {
  __u32 addr;
  char name[32];
- };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ };
 } __attribute__ ((packed));
 struct v4l2_dbg_register {
  struct v4l2_dbg_match match;
- __u32 size;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 size;
  __u64 reg;
  __u64 val;
 } __attribute__ ((packed));
-struct v4l2_dbg_chip_ident {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct v4l2_dbg_chip_ident {
  struct v4l2_dbg_match match;
  __u32 ident;
  __u32 revision;
-} __attribute__ ((packed));
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+} __attribute__ ((packed));
 struct v4l2_create_buffers {
  __u32 index;
  __u32 count;
- __u32 memory;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ __u32 memory;
  struct v4l2_format format;
  __u32 reserved[8];
 };
-#define VIDIOC_QUERYCAP _IOR('V', 0, struct v4l2_capability)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_QUERYCAP _IOR('V', 0, struct v4l2_capability)
 #define VIDIOC_RESERVED _IO('V', 1)
 #define VIDIOC_ENUM_FMT _IOWR('V', 2, struct v4l2_fmtdesc)
 #define VIDIOC_G_FMT _IOWR('V', 4, struct v4l2_format)
-#define VIDIOC_S_FMT _IOWR('V', 5, struct v4l2_format)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_S_FMT _IOWR('V', 5, struct v4l2_format)
 #define VIDIOC_REQBUFS _IOWR('V', 8, struct v4l2_requestbuffers)
 #define VIDIOC_QUERYBUF _IOWR('V', 9, struct v4l2_buffer)
 #define VIDIOC_G_FBUF _IOR('V', 10, struct v4l2_framebuffer)
-#define VIDIOC_S_FBUF _IOW('V', 11, struct v4l2_framebuffer)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_S_FBUF _IOW('V', 11, struct v4l2_framebuffer)
 #define VIDIOC_OVERLAY _IOW('V', 14, int)
 #define VIDIOC_QBUF _IOWR('V', 15, struct v4l2_buffer)
 #define VIDIOC_DQBUF _IOWR('V', 17, struct v4l2_buffer)
-#define VIDIOC_STREAMON _IOW('V', 18, int)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_STREAMON _IOW('V', 18, int)
 #define VIDIOC_STREAMOFF _IOW('V', 19, int)
 #define VIDIOC_G_PARM _IOWR('V', 21, struct v4l2_streamparm)
 #define VIDIOC_S_PARM _IOWR('V', 22, struct v4l2_streamparm)
-#define VIDIOC_G_STD _IOR('V', 23, v4l2_std_id)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_STD _IOR('V', 23, v4l2_std_id)
 #define VIDIOC_S_STD _IOW('V', 24, v4l2_std_id)
 #define VIDIOC_ENUMSTD _IOWR('V', 25, struct v4l2_standard)
 #define VIDIOC_ENUMINPUT _IOWR('V', 26, struct v4l2_input)
-#define VIDIOC_G_CTRL _IOWR('V', 27, struct v4l2_control)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_CTRL _IOWR('V', 27, struct v4l2_control)
 #define VIDIOC_S_CTRL _IOWR('V', 28, struct v4l2_control)
 #define VIDIOC_G_TUNER _IOWR('V', 29, struct v4l2_tuner)
 #define VIDIOC_S_TUNER _IOW('V', 30, struct v4l2_tuner)
-#define VIDIOC_G_AUDIO _IOR('V', 33, struct v4l2_audio)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_AUDIO _IOR('V', 33, struct v4l2_audio)
 #define VIDIOC_S_AUDIO _IOW('V', 34, struct v4l2_audio)
 #define VIDIOC_QUERYCTRL _IOWR('V', 36, struct v4l2_queryctrl)
 #define VIDIOC_QUERYMENU _IOWR('V', 37, struct v4l2_querymenu)
-#define VIDIOC_G_INPUT _IOR('V', 38, int)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_INPUT _IOR('V', 38, int)
 #define VIDIOC_S_INPUT _IOWR('V', 39, int)
 #define VIDIOC_G_OUTPUT _IOR('V', 46, int)
 #define VIDIOC_S_OUTPUT _IOWR('V', 47, int)
-#define VIDIOC_ENUMOUTPUT _IOWR('V', 48, struct v4l2_output)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_ENUMOUTPUT _IOWR('V', 48, struct v4l2_output)
 #define VIDIOC_G_AUDOUT _IOR('V', 49, struct v4l2_audioout)
 #define VIDIOC_S_AUDOUT _IOW('V', 50, struct v4l2_audioout)
 #define VIDIOC_G_MODULATOR _IOWR('V', 54, struct v4l2_modulator)
-#define VIDIOC_S_MODULATOR _IOW('V', 55, struct v4l2_modulator)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_S_MODULATOR _IOW('V', 55, struct v4l2_modulator)
 #define VIDIOC_G_FREQUENCY _IOWR('V', 56, struct v4l2_frequency)
 #define VIDIOC_S_FREQUENCY _IOW('V', 57, struct v4l2_frequency)
 #define VIDIOC_CROPCAP _IOWR('V', 58, struct v4l2_cropcap)
-#define VIDIOC_G_CROP _IOWR('V', 59, struct v4l2_crop)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_CROP _IOWR('V', 59, struct v4l2_crop)
 #define VIDIOC_S_CROP _IOW('V', 60, struct v4l2_crop)
 #define VIDIOC_G_JPEGCOMP _IOR('V', 61, struct v4l2_jpegcompression)
 #define VIDIOC_S_JPEGCOMP _IOW('V', 62, struct v4l2_jpegcompression)
-#define VIDIOC_QUERYSTD _IOR('V', 63, v4l2_std_id)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_QUERYSTD _IOR('V', 63, v4l2_std_id)
 #define VIDIOC_TRY_FMT _IOWR('V', 64, struct v4l2_format)
 #define VIDIOC_ENUMAUDIO _IOWR('V', 65, struct v4l2_audio)
 #define VIDIOC_ENUMAUDOUT _IOWR('V', 66, struct v4l2_audioout)
-#define VIDIOC_G_PRIORITY _IOR('V', 67, __u32)  
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VIDIOC_S_PRIORITY _IOW('V', 68, __u32)  
+#define VIDIOC_G_PRIORITY _IOR('V', 67, __u32)
+#define VIDIOC_S_PRIORITY _IOW('V', 68, __u32)
 #define VIDIOC_G_SLICED_VBI_CAP _IOWR('V', 69, struct v4l2_sliced_vbi_cap)
 #define VIDIOC_LOG_STATUS _IO('V', 70)
-#define VIDIOC_G_EXT_CTRLS _IOWR('V', 71, struct v4l2_ext_controls)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_G_EXT_CTRLS _IOWR('V', 71, struct v4l2_ext_controls)
 #define VIDIOC_S_EXT_CTRLS _IOWR('V', 72, struct v4l2_ext_controls)
 #define VIDIOC_TRY_EXT_CTRLS _IOWR('V', 73, struct v4l2_ext_controls)
 #define VIDIOC_ENUM_FRAMESIZES _IOWR('V', 74, struct v4l2_frmsizeenum)
-#define VIDIOC_ENUM_FRAMEINTERVALS _IOWR('V', 75, struct v4l2_frmivalenum)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_ENUM_FRAMEINTERVALS _IOWR('V', 75, struct v4l2_frmivalenum)
 #define VIDIOC_G_ENC_INDEX _IOR('V', 76, struct v4l2_enc_idx)
 #define VIDIOC_ENCODER_CMD _IOWR('V', 77, struct v4l2_encoder_cmd)
 #define VIDIOC_TRY_ENCODER_CMD _IOWR('V', 78, struct v4l2_encoder_cmd)
-#define VIDIOC_DBG_S_REGISTER _IOW('V', 79, struct v4l2_dbg_register)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_DBG_S_REGISTER _IOW('V', 79, struct v4l2_dbg_register)
 #define VIDIOC_DBG_G_REGISTER _IOWR('V', 80, struct v4l2_dbg_register)
 #define VIDIOC_DBG_G_CHIP_IDENT _IOWR('V', 81, struct v4l2_dbg_chip_ident)
 #define VIDIOC_S_HW_FREQ_SEEK _IOW('V', 82, struct v4l2_hw_freq_seek)
-#define VIDIOC_ENUM_DV_PRESETS _IOWR('V', 83, struct v4l2_dv_enum_preset)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_ENUM_DV_PRESETS _IOWR('V', 83, struct v4l2_dv_enum_preset)
 #define VIDIOC_S_DV_PRESET _IOWR('V', 84, struct v4l2_dv_preset)
 #define VIDIOC_G_DV_PRESET _IOWR('V', 85, struct v4l2_dv_preset)
 #define VIDIOC_QUERY_DV_PRESET _IOR('V', 86, struct v4l2_dv_preset)
-#define VIDIOC_S_DV_TIMINGS _IOWR('V', 87, struct v4l2_dv_timings)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_S_DV_TIMINGS _IOWR('V', 87, struct v4l2_dv_timings)
 #define VIDIOC_G_DV_TIMINGS _IOWR('V', 88, struct v4l2_dv_timings)
 #define VIDIOC_DQEVENT _IOR('V', 89, struct v4l2_event)
 #define VIDIOC_SUBSCRIBE_EVENT _IOW('V', 90, struct v4l2_event_subscription)
-#define VIDIOC_UNSUBSCRIBE_EVENT _IOW('V', 91, struct v4l2_event_subscription)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_UNSUBSCRIBE_EVENT _IOW('V', 91, struct v4l2_event_subscription)
 #define VIDIOC_CREATE_BUFS _IOWR('V', 92, struct v4l2_create_buffers)
 #define VIDIOC_PREPARE_BUF _IOWR('V', 93, struct v4l2_buffer)
 #define VIDIOC_G_SELECTION _IOWR('V', 94, struct v4l2_selection)
-#define VIDIOC_S_SELECTION _IOWR('V', 95, struct v4l2_selection)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_S_SELECTION _IOWR('V', 95, struct v4l2_selection)
 #define VIDIOC_DECODER_CMD _IOWR('V', 96, struct v4l2_decoder_cmd)
 #define VIDIOC_TRY_DECODER_CMD _IOWR('V', 97, struct v4l2_decoder_cmd)
 #define VIDIOC_ENUM_DV_TIMINGS _IOWR('V', 98, struct v4l2_enum_dv_timings)
-#define VIDIOC_QUERY_DV_TIMINGS _IOR('V', 99, struct v4l2_dv_timings)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VIDIOC_QUERY_DV_TIMINGS _IOR('V', 99, struct v4l2_dv_timings)
 #define VIDIOC_DV_TIMINGS_CAP _IOWR('V', 100, struct v4l2_dv_timings_cap)
 #define VIDIOC_ENUM_FREQ_BANDS _IOWR('V', 101, struct v4l2_frequency_band)
 #define BASE_VIDIOC_PRIVATE 192
-#endif
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#endif
