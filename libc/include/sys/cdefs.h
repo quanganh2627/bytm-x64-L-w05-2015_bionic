@@ -524,7 +524,7 @@
 #endif
 
 #define __BIONIC_FORTIFY_INLINE \
-    extern __inline__ \
+    extern inline \
     __attribute__ ((always_inline)) \
     __attribute__ ((gnu_inline)) \
     __attribute__ ((artificial))
