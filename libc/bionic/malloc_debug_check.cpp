@@ -54,7 +54,6 @@
 
 /* libc.debug.malloc.backlog */
 extern unsigned int gMallocDebugBacklog;
-extern int gMallocDebugTrackLeak;
 extern int gMallocDebugLevel;
 
 #define MAX_BACKTRACE_DEPTH 16
@@ -77,7 +76,6 @@ struct hdr_t {
     uint32_t tag;
     hdr_t* prev;
     hdr_t* next;
-    hdr_t* orig;
     uintptr_t bt[MAX_BACKTRACE_DEPTH];
     int bt_depth;
     uintptr_t freed_bt[MAX_BACKTRACE_DEPTH];
@@ -102,16 +100,6 @@ static inline hdr_t* meta(void* user) {
     return reinterpret_cast<hdr_t*>(user) - 1;
 }
 
-static inline size_t hdr_t_offset() {
-    size_t align_mask = MALLOC_ALIGNMENT - 1;
-    return (sizeof(hdr_t) & align_mask) == 0 ? 0 :
-            (MALLOC_ALIGNMENT - (sizeof(hdr_t) & align_mask)) & align_mask;
-}
-
-static inline hdr_t* align_hdr_t(hdr_t* hdr) {
-    return reinterpret_cast<hdr_t*>(reinterpret_cast<char*>(hdr) + hdr_t_offset());
-}
-
 static unsigned gAllocatedBlockCount;
 static hdr_t *tail;
 static hdr_t *head;
@@ -128,7 +116,7 @@ static inline void init_front_guard(hdr_t *hdr) {
 
 static inline bool is_front_guard_valid(hdr_t *hdr) {
     for (size_t i = 0; i < FRONT_GUARD_LEN; i++) {
-        if (hdr->front_guard[i] != (char)FRONT_GUARD) {
+        if (hdr->front_guard[i] != FRONT_GUARD) {
             return 0;
         }
     }
@@ -146,7 +134,7 @@ static inline bool is_rear_guard_valid(hdr_t *hdr) {
     int first_mismatch = -1;
     ftr_t* ftr = to_ftr(hdr);
     for (i = 0; i < REAR_GUARD_LEN; i++) {
-        if (ftr->rear_guard[i] != (char)REAR_GUARD) {
+        if (ftr->rear_guard[i] != REAR_GUARD) {
             if (first_mismatch < 0)
                 first_mismatch = i;
             valid = 0;
@@ -214,7 +202,7 @@ static int was_used_after_free(hdr_t *hdr) {
     unsigned i;
     const char *data = (const char *)user(hdr);
     for (i = 0; i < hdr->size; i++)
-        if (data[i] != (char)FREE_POISON)
+        if (data[i] != FREE_POISON)
             return 1;
     return 0;
 }
@@ -223,7 +211,7 @@ static int was_used_after_free(hdr_t *hdr) {
 static inline int check_guards(hdr_t *hdr, int *safe) {
     *safe = 1;
     if (!is_front_guard_valid(hdr)) {
-        if (hdr->front_guard[0] == (char)FRONT_GUARD) {
+        if (hdr->front_guard[0] == FRONT_GUARD) {
             log_message("+++ ALLOCATION %p SIZE %d HAS A CORRUPTED FRONT GUARD\n",
                        user(hdr), hdr->size);
         } else {
@@ -321,71 +309,26 @@ static inline void add_to_backlog(hdr_t *hdr) {
     while (backlog_num > gMallocDebugBacklog) {
         hdr_t *gone = backlog_tail;
         del_from_backlog_locked(gone);
-        dlfree(gone->orig);
+        dlfree(gone);
     }
 }
 
 extern "C" void* chk_malloc(size_t size) {
 //  log_message("%s: %s\n", __FILE__, __FUNCTION__);
 
-    hdr_t* hdr = static_cast<hdr_t*>(dlmalloc(sizeof(hdr_t) + hdr_t_offset() + size + sizeof(ftr_t)));
+    hdr_t* hdr = static_cast<hdr_t*>(dlmalloc(sizeof(hdr_t) + size + sizeof(ftr_t)));
     if (hdr) {
-        hdr_t* hdr_orig = hdr;
-        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        hdr->orig = hdr_orig;
         add(hdr, size);
         return user(hdr);
     }
     return NULL;
 }
 
-extern "C" void* chk_memalign(size_t alignment, size_t size)
-{
-    hdr_t * hdr, * hdr_orig;
-    size_t aligned_size = 0;
-    intptr_t ptr = 0;
-    size_t remainder = 0;
-
-    // we can just use malloc
-    // if (alignment <= MALLOC_ALIGNMENT)
-    //    return chk_malloc(size);
-
-    // need to make sure it's a power of two
-    if (alignment & (alignment-1))
-        alignment = 1L << (31 - __builtin_clz(alignment));
-
-    // here, aligment is at least MALLOC_ALIGNMENT<<1 bytes
-    // we will align by at least MALLOC_ALIGNMENT bytes
-    // and at most alignment-MALLOC_ALIGNMENT bytes
-    if (alignment >= sizeof(hdr_t))
-        aligned_size = alignment + size + sizeof(struct hdr_t) + sizeof(struct ftr_t);
-    else
-        aligned_size = sizeof(struct hdr_t) + size + sizeof(struct hdr_t) + sizeof(struct ftr_t);
-
-    hdr = static_cast<hdr_t*>(dlmalloc(aligned_size));
-    hdr_orig = hdr;
-    if (hdr) {
-        if (alignment >= sizeof(struct hdr_t)) {
-            ptr = (intptr_t)hdr;
-            remainder = (-ptr)%alignment;
-            if (remainder >= sizeof(struct hdr_t))
-                ptr += remainder;
-            else
-                ptr += remainder + alignment;
-        }
-        else {
-            ptr = (intptr_t)((unsigned long)hdr +sizeof(struct hdr_t));
-            remainder = (-ptr)%alignment;
-            ptr += remainder;
-        }
-        hdr = static_cast<hdr_t*>((void*)(ptr - sizeof(struct hdr_t)));
-        hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        hdr->orig = hdr_orig;
-        add(hdr, size);
-        return  user(hdr);
-    }
-    return NULL;
+extern "C" void* chk_memalign(size_t, size_t bytes) {
+//  log_message("%s: %s\n", __FILE__, __FUNCTION__);
+    // XXX: it's better to use malloc, than being wrong
+    return chk_malloc(bytes);
 }
 
 extern "C" void chk_free(void *ptr) {
@@ -471,12 +414,9 @@ extern "C" void *chk_realloc(void *ptr, size_t size) {
         }
     }
 
-    hdr = static_cast<hdr_t*>(dlrealloc(hdr->orig, sizeof(hdr_t) + hdr_t_offset() + size + sizeof(ftr_t)));
+    hdr = static_cast<hdr_t*>(dlrealloc(hdr, sizeof(hdr_t) + size + sizeof(ftr_t)));
     if (hdr) {
-        hdr_t* hdr_orig = hdr;
-        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        hdr->orig = hdr_orig;
         add(hdr, size);
         return user(hdr);
     }
@@ -487,12 +427,9 @@ extern "C" void *chk_realloc(void *ptr, size_t size) {
 extern "C" void *chk_calloc(int nmemb, size_t size) {
 //  log_message("%s: %s\n", __FILE__, __FUNCTION__);
     size_t total_size = nmemb * size;
-    hdr_t* hdr = static_cast<hdr_t*>(dlcalloc(1, sizeof(hdr_t) + hdr_t_offset() + total_size + sizeof(ftr_t)));
+    hdr_t* hdr = static_cast<hdr_t*>(dlcalloc(1, sizeof(hdr_t) + total_size + sizeof(ftr_t)));
     if (hdr) {
-        hdr_t* hdr_orig = hdr;
-        hdr = align_hdr_t(hdr);
         hdr->bt_depth = get_backtrace(hdr->bt, MAX_BACKTRACE_DEPTH);
-        hdr->orig = hdr_orig;
         add(hdr, total_size);
         return user(hdr);
     }
@@ -501,7 +438,7 @@ extern "C" void *chk_calloc(int nmemb, size_t size) {
 
 static void ReportMemoryLeaks() {
   // We only track leaks at level 10.
-  if (gMallocDebugLevel != 10 || gMallocDebugTrackLeak != 1) {
+  if (gMallocDebugLevel != 10) {
     return;
   }
 

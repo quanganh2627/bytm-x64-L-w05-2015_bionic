@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011, Intel Corporation
+Copyright (c) 2010, Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,15 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define USE_AS_STRNLEN 1
-#define STRLEN  strnlen
-#include "sse2-strlen-atom.S"
+#if defined(USE_SSE2)
+
+# include "cache_wrapper.S"
+# undef __i686
+# define sse2_memset5_atom memset
+# include "sse2-memset5-atom.S"
+
+#else
+
+# include "memset.S"
+
+#endif

@@ -1,3 +1,4 @@
+/*	$OpenBSD: index.c,v 1.5 2005/08/08 08:05:37 espie Exp $ */
 /*-
  * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.
@@ -30,17 +31,21 @@
 #include <string.h>
 #include "libc_logging.h"
 
-extern "C" char* __strchr_chk(const char* p, int ch, size_t s_len) {
-  for (;; ++p, s_len--) {
-    if (__predict_false(s_len == 0)) {
-      __fortify_chk_fail("read beyond buffer", 0);
-    }
-    if (*p == static_cast<char>(ch)) {
-      return const_cast<char*>(p);
-    }
-    if (*p == '\0') {
-      return NULL;
-    }
-  }
-  /* NOTREACHED */
+char *
+__strchr_chk(const char *p, int ch, size_t s_len)
+{
+	for (;; ++p, s_len--) {
+		if (s_len == 0)
+			__fortify_chk_fail("strchr read beyond buffer", 0);
+		if (*p == (char) ch)
+			return((char *)p);
+		if (!*p)
+			return((char *)NULL);
+	}
+	/* NOTREACHED */
+}
+
+char *
+strchr(const char *p, int ch) {
+    return __strchr_chk(p, ch, __BIONIC_FORTIFY_UNKNOWN_SIZE);
 }

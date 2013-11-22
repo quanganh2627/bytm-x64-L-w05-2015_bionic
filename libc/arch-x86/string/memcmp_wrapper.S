@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011, Intel Corporation
+Copyright (c) 2010, Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,13 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define STRCAT  strncat
-#define USE_AS_STRNCAT
+#if defined(USE_SSSE3)
 
-#include "ssse3-strcat-atom.S"
+# define MEMCMP memcmp
+# include "ssse3-memcmp3-new.S"
+
+#else
+
+# include "memcmp.S"
+
+#endif
