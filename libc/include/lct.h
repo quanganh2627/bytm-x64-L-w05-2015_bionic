@@ -95,7 +95,7 @@ extern inline int lct_add_attchmt(struct ct_event **ev,
 				  unsigned int size, const char *data)
 {
 	__u32 new_size = sizeof(struct ct_event) + (*ev)->attchmt_size +
-		ALIGN(size + sizeof(struct ct_attchmt), ATTCHMT_ALIGNMENT);
+		KCT_ALIGN(size + sizeof(struct ct_attchmt), ATTCHMT_ALIGNMENT);
 	struct ct_event *new_ev = new_ev = realloc(*ev, new_size);
 	if (new_ev) {
 		struct ct_attchmt *new_attchmt = (struct ct_attchmt *)
