@@ -1605,7 +1605,6 @@ static void add_vdso(KernelArgumentBlock& args UNUSED) {
     si->load_bias = get_elf_exec_load_bias(ehdr_vdso);
 
     soinfo_link_image(si);
-    insert_soinfo_into_debug_map(si);
 #endif
 }
 
