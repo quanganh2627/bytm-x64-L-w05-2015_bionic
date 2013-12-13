@@ -73,6 +73,7 @@
  */
 
 static bool soinfo_link_image(soinfo* si);
+static Elf32_Addr get_elf_exec_load_bias(const Elf32_Ehdr* elf);
 
 // We can't use malloc(3) in the dynamic linker. We use a linked list of anonymous
 // maps, each a single page in size. The pages are broken up into as many struct soinfo
@@ -181,7 +182,7 @@ static pthread_mutex_t gDebugMutex = PTHREAD_MUTEX_INITIALIZER;
 static void insert_soinfo_into_debug_map(soinfo * info) {
     // Copy the necessary fields into the debug structure.
     link_map_t* map = &(info->link_map);
-    map->l_addr = info->base;
+    map->l_addr = info->load_bias;
     map->l_name = (char*) info->name;
     map->l_ld = (uintptr_t)info->dynamic;
 
@@ -1531,8 +1532,8 @@ static bool soinfo_link_image(soinfo* si) {
          * phdr_table_protect_segments() after all of them are applied
          * and all constructors are run.
          */
-        DL_WARN("%s has text relocations. This is wasting memory and is "
-                "a security risk. Please fix.", si->name);
+       //  DL_WARN("%s has text relocations. This is wasting memory and is "
+       //         "a security risk. Please fix.", si->name);
         if (phdr_table_unprotect_segments(si->phdr, si->phnum, si->load_bias) < 0) {
             DL_ERR("can't unprotect loadable segments for \"%s\": %s",
                    si->name, strerror(errno));
@@ -1595,13 +1596,13 @@ static void add_vdso(KernelArgumentBlock& args UNUSED) {
     soinfo* si = soinfo_alloc("[vdso]");
     si->phdr = reinterpret_cast<Elf32_Phdr*>(reinterpret_cast<char*>(ehdr_vdso) + ehdr_vdso->e_phoff);
     si->phnum = ehdr_vdso->e_phnum;
-    si->link_map.l_name = si->name;
-    for (size_t i = 0; i < si->phnum; ++i) {
-        if (si->phdr[i].p_type == PT_LOAD) {
-            si->link_map.l_addr = reinterpret_cast<Elf32_Addr>(ehdr_vdso) - si->phdr[i].p_vaddr;
-            break;
-        }
-    }
+    si->base = reinterpret_cast<Elf32_Addr>(ehdr_vdso);
+    si->size = phdr_table_get_load_size(si->phdr, si->phnum);
+    si->flags = 0;
+    si->load_bias = get_elf_exec_load_bias(ehdr_vdso);
+
+    soinfo_link_image(si);
+    insert_soinfo_into_debug_map(si);
 #endif
 }
 

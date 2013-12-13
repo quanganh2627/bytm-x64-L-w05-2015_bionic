@@ -16,15 +16,10 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef _UAPI_ASM_X86_IST_H
-#define _UAPI_ASM_X86_IST_H
-#include <linux/types.h>
-struct ist_info {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- __u32 signature;
- __u32 command;
- __u32 event;
- __u32 perf_level;
+#ifndef _UAPI__linux_video_edid_h__
+#define _UAPI__linux_video_edid_h__
+struct edid_info {
+ unsigned char dummy[128];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
 #endif
