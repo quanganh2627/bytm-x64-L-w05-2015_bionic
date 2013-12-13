@@ -1,4 +1,3 @@
-ifneq ($(USE_PRIVATE_LIBM),true)
 LOCAL_PATH:= $(call my-dir)
 
 # TODO: these come from from upstream's libc, not libm!
@@ -253,4 +252,3 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_SYSTEM_SHARED_LIBRARIES := libc
 LOCAL_WHOLE_STATIC_LIBRARIES := libm
 include $(BUILD_SHARED_LIBRARY)
-endif

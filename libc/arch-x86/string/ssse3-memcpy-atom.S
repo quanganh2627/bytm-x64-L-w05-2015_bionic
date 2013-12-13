@@ -31,10 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "cache.h"
 #undef __i686
 
-#ifndef USE_AS_MEMMOVE
-# define USE_AS_MEMMOVE 1
-#endif
-
 #ifndef MEMCPY
 # define MEMCPY	memcpy
 #endif
