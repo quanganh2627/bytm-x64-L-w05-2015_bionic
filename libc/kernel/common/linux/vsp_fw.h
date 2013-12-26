@@ -249,213 +249,180 @@ struct vsp_secure_boot_header {
  unsigned int boot_start_value;
  unsigned int boot_start_reg;
 };
-#define VSP_MULTI_APP_MAGIC_NR 0xb10b0004
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VSP_MULTI_APP_MAX_APPS 16
-#define VSP_MULTI_APP_MAX_CONTEXTS 32
-#define VSP_API_GENERIC_CONTEXT_ID (0xffffffff)
-struct vsp_multi_app_blob_data {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int magic_number;
- unsigned int offset_from_start;
- unsigned int imr_state_buffer_addr;
- unsigned int imr_state_buffer_size;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int apps_default_context_buffer_size;
- unsigned int application_blob_offsets[VSP_MULTI_APP_MAX_APPS];
-};
-struct vsp_multi_app_context_settings {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int app_id;
- unsigned int usage;
-};
-struct vsp_multi_app_imr_header {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int vsp_and_imr_state;
- unsigned int reserved_1;
- unsigned int reserved_2;
- unsigned int reserved_3;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int reserved_4;
- unsigned int reserved_5;
- unsigned int reserved_6;
- unsigned int reserved_7;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- struct vsp_multi_app_context_settings context_settings[VSP_MULTI_APP_MAX_CONTEXTS];
-};
-enum vsp_imr_state{
- vsp_imr_uninitialized = 0,
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- vsp_imr_safe_to_resume = 1,
- vsp_imr_initialized = 2,
- vsp_imr_app_is_running = 3
-};
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 enum vsp_ctrl_reg_addr {
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  VSP_SETTING_ADDR_REG = 3,
  VSP_SECBOOT_DEBUG_REG = 4,
  VSP_ENTRY_KIND_REG = 5,
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  VSP_POWER_SAVING_MODE_REG = 6,
- VSP_MMU_TLB_SOFT_INVALIDATE_REG = 7,
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VSP_CONTEXT_ID_REG = 7,
  VSP_CMD_QUEUE_RD_REG = 12,
  VSP_CMD_QUEUE_WR_REG = 13,
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  VSP_ACK_QUEUE_RD_REG = 14,
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  VSP_ACK_QUEUE_WR_REG = 15
 };
 struct vsp_ctrl_reg {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int reserved_2;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int setting_addr;
  unsigned int secboot_debug;
  unsigned int entry_kind;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int power_saving_mode;
- unsigned int mmu_tlb_soft_invalidate;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int context_setting_addr;
  unsigned int reserved_8;
  unsigned int reserved_9;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int reserved_10;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int reserved_11;
  unsigned int cmd_rd;
  unsigned int cmd_wr;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int ack_rd;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int ack_wr;
 };
 struct vsp_settings_t {
+ unsigned int max_contexts;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int reserved0;
  unsigned int command_queue_size;
  unsigned int command_queue_addr;
  unsigned int response_queue_size;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int response_queue_addr;
- unsigned int reserved5;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int contexts_array_addr;
  unsigned int reserved6;
  unsigned int reserved7;
+};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct vsp_context_settings_t {
+ unsigned int app_id;
+ unsigned int state_buffer_size;
+ unsigned int state_buffer_addr;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int reserved3;
+ unsigned int reserved4;
+ unsigned int reserved5;
+ unsigned int reserved6;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int usage;
 };
 enum vsp_context_usage {
  vsp_context_unused = 0,
- vsp_context_deinit = 1,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ vsp_context_deinit = 1,
  vsp_context_starting = 16,
  vsp_context_in_use = 17
 };
-#define VSP_SETTINGS_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0}
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VSP_SETTINGS_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0}
 enum vsp_entry_kind {
  vsp_entry_booted = 0,
  vsp_entry_init = 1,
- vsp_entry_resume = 2,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ vsp_entry_resume = 2,
  vsp_exit = 3
 };
 enum vsp_power_saving_mode {
- vsp_always_on = 0,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ vsp_always_on = 0,
  vsp_suspend_on_empty_queue = 1,
  vsp_hw_idle_on_empty_queue = 2,
  vsp_suspend_and_hw_idle_on_empty_queue
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct VssProcPictureVP8 {
  uint32_t surface_id;
  uint32_t irq;
- uint32_t base;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t base;
  uint32_t base_uv;
  uint32_t height;
  uint32_t width;
- uint32_t stride;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t stride;
  uint32_t format;
 };
 typedef enum {
- vss_vp8enc_seq_param_recon_buffer_mode_per_seq = 0,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ vss_vp8enc_seq_param_recon_buffer_mode_per_seq = 0,
  vss_vp8enc_seq_param_recon_buffer_mode_per_pic,
  vss_vp8enc_seq_param_recon_buffer_mode_cnt
 } vss_vp8enc_seq_param_recon_buffer_mode_t;
-struct VssVp8encSequenceParameterBuffer {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct VssVp8encSequenceParameterBuffer {
  uint32_t frame_width;
  uint32_t frame_height;
  uint32_t frame_rate;
- uint32_t error_resilient;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t error_resilient;
  uint32_t num_token_partitions;
  uint32_t kf_mode;
  uint32_t kf_min_dist;
- uint32_t kf_max_dist;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t kf_max_dist;
  uint32_t rc_target_bitrate;
  uint32_t rc_min_quantizer;
  uint32_t rc_max_quantizer;
- uint32_t rc_undershoot_pct;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t rc_undershoot_pct;
  uint32_t rc_overshoot_pct;
  uint32_t rc_end_usage;
  uint32_t rc_buf_sz;
- uint32_t rc_buf_initial_sz;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t rc_buf_initial_sz;
  uint32_t rc_buf_optimal_sz;
  uint32_t max_intra_rate;
  uint32_t cyclic_intra_refresh;
- uint32_t concatenate_partitions;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t concatenate_partitions;
  uint32_t recon_buffer_mode;
  struct VssProcPictureVP8 ref_frame_buffers[4];
 };
-struct VssVp8encEncodedFrame {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct VssVp8encEncodedFrame {
  uint32_t frame_size;
  uint32_t status;
  uint32_t partitions;
- uint32_t partition_size[9];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t partition_size[9];
  uint32_t partition_start[9];
  uint32_t segments;
  uint32_t quantizer[4];
- uint32_t frame_flags;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t frame_flags;
  uint32_t partition_id;
  uint32_t buffer_level;
  uint32_t quality;
- uint32_t surfaceId_of_ref_frame[4];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t surfaceId_of_ref_frame[4];
  uint32_t reserved[15];
  uint32_t coded_data[1];
 };
-struct VssVp8encPictureParameterBuffer {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct VssVp8encPictureParameterBuffer {
  struct VssProcPictureVP8 input_frame;
  struct VssProcPictureVP8 recon_frame;
  uint32_t version;
- uint32_t pic_flags;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t pic_flags;
  uint32_t prev_frame_dropped;
  uint32_t cpuused;
  uint32_t sharpness;
- uint32_t num_token_partitions;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t num_token_partitions;
  uint32_t encoded_frame_size;
  uint32_t encoded_frame_base;
 };
-enum VssVp8encCommandType {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+enum VssVp8encCommandType {
  VssVp8encSetSequenceParametersCommand = 123,
  VssVp8encEncodeFrameCommand,
  VssVp8encEndOfSequenceCommand,
- VssVp8encInit,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssVp8encInit,
  Vss_Sys_Ref_Frame_COMMAND
 };
-enum VssGenCommandType {
- VssGenInitializeContext = 0xab01,
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- VssGenDestroyContext = 0xab02
-};
 #endif
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
