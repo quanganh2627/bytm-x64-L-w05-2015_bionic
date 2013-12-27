@@ -1593,6 +1593,9 @@ static void add_vdso(KernelArgumentBlock& args UNUSED) {
 #ifdef AT_SYSINFO_EHDR
     Elf32_Ehdr* ehdr_vdso = reinterpret_cast<Elf32_Ehdr*>(args.getauxval(AT_SYSINFO_EHDR));
 
+    if (!ehdr_vdso)
+        return;
+
     soinfo* si = soinfo_alloc("[vdso]");
     si->phdr = reinterpret_cast<Elf32_Phdr*>(reinterpret_cast<char*>(ehdr_vdso) + ehdr_vdso->e_phoff);
     si->phnum = ehdr_vdso->e_phnum;
@@ -1602,7 +1605,6 @@ static void add_vdso(KernelArgumentBlock& args UNUSED) {
     si->load_bias = get_elf_exec_load_bias(ehdr_vdso);
 
     soinfo_link_image(si);
-    insert_soinfo_into_debug_map(si);
 #endif
 }
 
