@@ -13,11 +13,23 @@ _LIBC_ARCH_COMMON_SRC_FILES := \
     arch-x86/bionic/vfork.S \
     arch-x86/string/ffs.S
 
-ifeq ($(ARCH_X86_HAVE_SSSE3),true)
+ifeq ($(TARGET_ARCH_VARIANT), x86-atom)
 _LIBC_ARCH_COMMON_SRC_FILES += \
 	arch-x86/string/ssse3-memcpy-atom.S \
 	arch-x86/string/ssse3-memmove-atom.S \
-	arch-x86/string/ssse3-bcopy-atom.S \
+	arch-x86/string/ssse3-bcopy-atom.S
+else
+# Fall here for slm. Also those functions are faster for hsw/ivy/sandy,
+# so we are using them as the default ones.
+_LIBC_ARCH_COMMON_SRC_FILES += \
+	arch-x86/string/sse2-memcpy-slm.S \
+	arch-x86/string/sse2-memmove-slm.S \
+	arch-x86/string/sse2-bcopy-slm.S
+endif
+
+
+ifeq ($(ARCH_X86_HAVE_SSSE3),true)
+_LIBC_ARCH_COMMON_SRC_FILES += \
 	arch-x86/string/ssse3-strncat-atom.S \
 	arch-x86/string/ssse3-strncpy-atom.S \
 	arch-x86/string/ssse3-strlcat-atom.S \
@@ -33,9 +45,6 @@ _LIBC_ARCH_COMMON_SRC_FILES += \
 	arch-x86/string/ssse3-wcscpy-atom.S
 else
 _LIBC_ARCH_COMMON_SRC_FILES += \
-	arch-x86/string/memcpy.S \
-	arch-x86/string/memmove.S \
-	arch-x86/string/bcopy.S \
 	arch-x86/string/strcmp.S \
 	arch-x86/string/strncmp.S \
 	arch-x86/string/strcat.S \
