@@ -129,9 +129,9 @@ struct psb_validate_rep {
 };
 #define PSB_USE_PRESUMED (1 << 0)
 struct psb_validate_arg {
- int handled;
+ uint64_t handled;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- int ret;
+ uint64_t ret;
  union {
  struct psb_validate_req req;
  struct psb_validate_rep rep;
@@ -192,7 +192,7 @@ enum lnc_getparam_key {
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 struct drm_lnc_video_getparam_arg {
- enum lnc_getparam_key key;
+ uint64_t key;
  uint64_t arg;
  uint64_t value;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
