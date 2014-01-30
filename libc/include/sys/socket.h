@@ -97,6 +97,12 @@ struct cmsghdr {
  int cmsg_type;
 };
 
+/* For recvmmsg/sendmmsg */
+struct mmsghdr {
+        struct msghdr   msg_hdr;
+        unsigned int        msg_len;
+};
+
 #define __CMSG_NXTHDR(ctl, len, cmsg) __cmsg_nxthdr((ctl),(len),(cmsg))
 #define CMSG_NXTHDR(mhdr, cmsg) cmsg_nxthdr((mhdr), (cmsg))
 #define CMSG_ALIGN(len) ( ((len)+sizeof(long)-1) & ~(sizeof(long)-1) )
@@ -238,6 +244,7 @@ struct ucred {
 #define MSG_ERRQUEUE 0x2000
 #define MSG_NOSIGNAL 0x4000
 #define MSG_MORE 0x8000
+#define MSG_WAITFORONE 0x10000
 #define MSG_EOF MSG_FIN
 #define MSG_CMSG_COMPAT 0
 
@@ -286,6 +293,10 @@ __socketcall int setsockopt(int, int, int, const void *, socklen_t);
 __socketcall int getsockopt(int, int, int, void *, socklen_t *);
 __socketcall int sendmsg(int, const struct msghdr *, unsigned int);
 __socketcall int recvmsg(int, struct msghdr *, unsigned int);
+__socketcall int recvmmsg(int fd, struct mmsghdr __user *mmsg, unsigned int vlen,
+                          unsigned int flags, struct timespec *timeout);
+__socketcall int sendmmsg(int fd, struct mmsghdr __user *mmsg,
+                          unsigned int vlen, unsigned int flags);
 
 extern  ssize_t  send(int, const void *, size_t, unsigned int);
 extern  ssize_t  recv(int, void *, size_t, unsigned int);
