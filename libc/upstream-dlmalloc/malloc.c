@@ -4413,8 +4413,8 @@ static int sys_trim(mstate m, size_t pad) {
    of free mainly in that the chunk need not be marked as inuse.
 */
 static void dispose_chunk(mstate m, mchunkptr p, size_t psize) {
-  mchunkptr next = chunk_plus_offset(p, psize);
-  mchunkptr errptr = p;
+  mchunkptr origptr = p;
+  mchunkptr next = chunk_plus_offset(origptr, psize);
   if (!pinuse(p)) {
     mchunkptr prev;
     size_t prevsize = p->prev_foot;
@@ -4438,7 +4438,7 @@ static void dispose_chunk(mstate m, mchunkptr p, size_t psize) {
       }
     }
     else {
-      DUMP_HEAP_BEFORE_ERROR_ACTION(m, errptr);
+      DUMP_HEAP_BEFORE_ERROR_ACTION(m, origptr);
       CORRUPTION_ERROR_ACTION(m);
       return;
     }
@@ -4478,7 +4478,7 @@ static void dispose_chunk(mstate m, mchunkptr p, size_t psize) {
     insert_chunk(m, p, psize);
   }
   else {
-    DUMP_HEAP_BEFORE_ERROR_ACTION(m, errptr);
+    DUMP_HEAP_BEFORE_ERROR_ACTION(m, origptr);
     CORRUPTION_ERROR_ACTION(m);
   }
 }
