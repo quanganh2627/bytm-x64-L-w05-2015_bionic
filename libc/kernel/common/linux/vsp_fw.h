@@ -408,57 +408,63 @@ struct VssVp8encSequenceParameterBuffer {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  uint32_t concatenate_partitions;
  uint32_t recon_buffer_mode;
- struct VssProcPictureVP8 ref_frame_buffers[4];
-};
+ uint32_t ts_number_layers;
+ uint32_t ts_target_bitrate[3];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t ts_rate_decimator[3];
+ uint32_t ts_periodicity;
+ uint32_t ts_layer_id[32];
+ struct VssProcPictureVP8 ref_frame_buffers[4];
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct VssVp8encEncodedFrame {
  uint32_t frame_size;
  uint32_t status;
- uint32_t partitions;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t partitions;
  uint32_t partition_size[9];
  uint32_t partition_start[9];
  uint32_t segments;
- uint32_t quantizer[4];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t quantizer[4];
  uint32_t frame_flags;
  uint32_t partition_id;
  uint32_t buffer_level;
- uint32_t quality;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t quality;
  uint32_t surfaceId_of_ref_frame[4];
  uint32_t reserved[15];
  uint32_t coded_data[1];
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct VssVp8encPictureParameterBuffer {
  struct VssProcPictureVP8 input_frame;
  struct VssProcPictureVP8 recon_frame;
- uint32_t version;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t version;
  uint32_t pic_flags;
  uint32_t prev_frame_dropped;
  uint32_t cpuused;
- uint32_t sharpness;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t sharpness;
  uint32_t num_token_partitions;
  uint32_t encoded_frame_size;
  uint32_t encoded_frame_base;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 enum VssVp8encCommandType {
  VssVp8encSetSequenceParametersCommand = 123,
  VssVp8encEncodeFrameCommand,
- VssVp8encEndOfSequenceCommand,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssVp8encEndOfSequenceCommand,
  VssVp8encInit,
  Vss_Sys_Ref_Frame_COMMAND
 };
-enum VssGenCommandType {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+enum VssGenCommandType {
  VssGenInitializeContext = 0xab01,
  VssGenDestroyContext = 0xab02
 };
-#pragma pack()
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#pragma pack()
 #endif
