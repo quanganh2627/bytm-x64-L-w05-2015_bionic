@@ -63,6 +63,10 @@ enum {
   TLS_SLOT_STACK_GUARD = 5, /* GCC requires this specific slot for x86. */
   TLS_SLOT_DLERROR,
 
+#define TLS_SLOT_OPENGL_GPU_DEFINED 1
+  /* Dedicated TLS slot for GPU specific use */
+  TLS_SLOT_OPENGL_GPU,
+
   TLS_SLOT_FIRST_USER_SLOT /* Must come last! */
 };
 
