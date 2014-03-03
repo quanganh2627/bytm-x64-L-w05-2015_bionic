@@ -7,7 +7,7 @@ ENTRY(__set_thread_area)
     pushl   %ebx
     mov     8(%esp), %ebx
     movl    $__NR_set_thread_area, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

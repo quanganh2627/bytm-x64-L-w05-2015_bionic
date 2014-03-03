@@ -390,9 +390,16 @@ _phdr_table_set_load_prot(const Elf32_Phdr* phdr_table,
         Elf32_Addr seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
         Elf32_Addr seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
 
+#ifdef __i386__
+        int ret = mprotect_int80((void*)seg_page_start,
+                           seg_page_end - seg_page_start,
+                           PFLAGS_TO_PROT(phdr->p_flags) | extra_prot_flags);
+#else
         int ret = mprotect((void*)seg_page_start,
                            seg_page_end - seg_page_start,
                            PFLAGS_TO_PROT(phdr->p_flags) | extra_prot_flags);
+
+#endif
         if (ret < 0) {
             return -1;
         }
@@ -481,9 +488,15 @@ _phdr_table_set_gnu_relro_prot(const Elf32_Phdr* phdr_table,
         Elf32_Addr seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
         Elf32_Addr seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
 
+#ifdef __i386__
+        int ret = mprotect_int80((void*)seg_page_start,
+                           seg_page_end - seg_page_start,
+                           prot_flags);
+#else
         int ret = mprotect((void*)seg_page_start,
                            seg_page_end - seg_page_start,
                            prot_flags);
+#endif
         if (ret < 0) {
             return -1;
         }

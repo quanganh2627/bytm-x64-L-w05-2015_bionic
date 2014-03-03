@@ -17,7 +17,7 @@ ENTRY(futex)
     mov     44(%esp), %edi
     mov     48(%esp), %ebp
     movl    $__NR_futex, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

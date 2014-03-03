@@ -7,7 +7,7 @@ ENTRY(__timer_getoverrun)
     pushl   %ebx
     mov     8(%esp), %ebx
     movl    $__NR_timer_getoverrun, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

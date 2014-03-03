@@ -5,7 +5,7 @@
 
 ENTRY(munlockall)
     movl    $__NR_munlockall, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

@@ -50,3 +50,18 @@ ENTRY(syscall)
     pop    %ebx
     ret
 END(syscall)
+
+ENTRY(__kernel_syscall_int80)
+    int    $0x80
+    ret
+
+    .type  __kernel_syscall_int80,@function
+    .size  __kernel_syscall_int80,.-__kernel_syscall_int80
+END(__kernel_syscall_int80)
+    .data
+    .balign 4
+    .globl __kernel_syscall
+__kernel_syscall:
+    .long  __kernel_syscall_int80
+    .size  __kernel_syscall,.-__kernel_syscall
+END(__kernel_syscall)
