@@ -4,6 +4,7 @@ _LIBC_ARCH_COMMON_SRC_FILES := \
     arch-x86/bionic/futex_x86.S \
     arch-x86/bionic/__get_sp.S \
     arch-x86/bionic/__get_tls.c \
+    arch-x86/bionic/mprotect_int80.S \
     arch-x86/bionic/_setjmp.S \
     arch-x86/bionic/setjmp.S \
     arch-x86/bionic/__set_tls.c \

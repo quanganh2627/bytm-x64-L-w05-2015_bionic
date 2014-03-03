@@ -49,6 +49,9 @@ extern void*  mmap64(void *, size_t, int, int, int, off64_t);
 extern int    munmap(void *, size_t);
 extern int    msync(const void *, size_t, int);
 extern int    mprotect(const void *, size_t, int);
+#ifdef __i386__
+extern int    mprotect_int80(const void *, size_t, int);
+#endif
 extern void*  mremap(void *, size_t, size_t, unsigned long);
 
 extern int    mlockall(int);

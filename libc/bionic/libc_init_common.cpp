@@ -64,6 +64,10 @@ uintptr_t __stack_chk_guard = 0;
 unsigned int __page_size = PAGE_SIZE;
 unsigned int __page_shift = PAGE_SHIFT;
 
+#ifdef __i386__
+extern "C" void (*__kernel_syscall)(int, ...);
+#endif
+
 static size_t get_stack_size() {
   const size_t minimal_stack_size = 128 * 1024;
   size_t stack_size = minimal_stack_size;
@@ -118,6 +122,13 @@ void __libc_init_common(KernelArgumentBlock& args) {
 
   // AT_RANDOM is a pointer to 16 bytes of randomness on the stack.
   __stack_chk_guard = *reinterpret_cast<uintptr_t*>(getauxval(AT_RANDOM));
+
+#ifdef __i386__
+  // AT_SYSINFO points to the system call entry point in the vdso
+  unsigned long sysinfo = getauxval(AT_SYSINFO);
+  if (sysinfo)
+    __kernel_syscall = reinterpret_cast<void (*)(int, ...)>(sysinfo);
+#endif
 
   // Get the main thread from TLS and add it to the thread list.
   pthread_internal_t* main_thread = __get_thread();

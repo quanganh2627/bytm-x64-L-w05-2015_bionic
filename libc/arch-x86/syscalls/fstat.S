@@ -9,7 +9,7 @@ ENTRY(fstat)
     mov     12(%esp), %ebx
     mov     16(%esp), %ecx
     movl    $__NR_fstat64, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

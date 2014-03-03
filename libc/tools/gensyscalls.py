@@ -46,6 +46,18 @@ ENTRY(%(fname)s)
 x86_registers = [ "%ebx", "%ecx", "%edx", "%esi", "%edi", "%ebp" ]
 
 x86_call = """    movl    $%(idname)s, %%eax
+    call    *__kernel_syscall
+    cmpl    $-MAX_ERRNO, %%eax
+    jb      1f
+    negl    %%eax
+    pushl   %%eax
+    call    __set_errno
+    addl    $4, %%esp
+    orl     $-1, %%eax
+1:
+"""
+
+x86_call_int80 = """    movl    $%(idname)s, %%eax
     int     $0x80
     cmpl    $-MAX_ERRNO, %%eax
     jb      1f
@@ -217,6 +229,27 @@ class State:
         result += x86_return % t
         return result
 
+    def x86_genstub_int80(self, fname, numparams, idname):
+        t = { "fname"  : fname,
+              "idname" : idname }
+
+        result     = x86_header % t
+        stack_bias = 4
+        for r in range(numparams):
+            result     += "    pushl   " + x86_registers[r] + "\n"
+            stack_bias += 4
+
+        for r in range(numparams):
+            result += "    mov     %d(%%esp), %s" % (stack_bias+r*4, x86_registers[r]) + "\n"
+
+        result += x86_call_int80 % t
+
+        for r in range(numparams):
+            result += "    popl    " + x86_registers[numparams-r-1] + "\n"
+
+        result += x86_return % t
+        return result
+
     def x86_genstub_cid(self, fname, numparams, idname, cid):
         # We'll ignore numparams here because in reality, if there is a
         # dispatch call (like a socketcall syscall) there are actually
@@ -245,7 +278,7 @@ class State:
         result += "    addl    $%d, %%ecx" % (stack_bias) + "\n"
 
         # now do the syscall code itself
-        result += x86_call % t
+        result += x86_call_int80 % t
 
         # now restore the saved regs
         result += "    popl    %ecx" + "\n"
@@ -291,7 +324,10 @@ class State:
                 if t["cid"] >= 0:
                     t["asm-x86"] = self.x86_genstub_cid(syscall_func, num_regs, make__NR_name(syscall_name), t["cid"])
                 else:
-                    t["asm-x86"] = self.x86_genstub(syscall_func, num_regs, make__NR_name(syscall_name))
+                    if syscall_func.startswith("__sys_clone") or syscall_func.startswith("__fork") :
+                        t["asm-x86"] = self.x86_genstub_int80(syscall_func, num_regs, make__NR_name(syscall_name))
+                    else:
+                        t["asm-x86"] = self.x86_genstub(syscall_func, num_regs, make__NR_name(syscall_name))
             elif t["cid"] >= 0:
                 E("cid for dispatch syscalls is only supported for x86 in "
                   "'%s'" % syscall_name)

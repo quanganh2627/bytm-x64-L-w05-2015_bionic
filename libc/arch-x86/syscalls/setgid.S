@@ -7,7 +7,7 @@ ENTRY(setgid)
     pushl   %ebx
     mov     8(%esp), %ebx
     movl    $__NR_setgid32, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax

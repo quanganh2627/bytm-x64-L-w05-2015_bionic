@@ -13,7 +13,7 @@ ENTRY(sendfile)
     mov     28(%esp), %edx
     mov     32(%esp), %esi
     movl    $__NR_sendfile, %eax
-    int     $0x80
+    call    *__kernel_syscall
     cmpl    $-MAX_ERRNO, %eax
     jb      1f
     negl    %eax
