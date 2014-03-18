@@ -17,16 +17,19 @@ ifeq ($(TARGET_ARCH_VARIANT), x86-atom)
 _LIBC_ARCH_COMMON_SRC_FILES += \
 	arch-x86/string/ssse3-memcpy-atom.S \
 	arch-x86/string/ssse3-memmove-atom.S \
-	arch-x86/string/ssse3-bcopy-atom.S
+	arch-x86/string/ssse3-bcopy-atom.S \
+	arch-x86/string/sse2-memset-atom.S \
+	arch-x86/string/sse2-bzero-atom.S
 else
 # Fall here for slm. Also those functions are faster for hsw/ivy/sandy,
 # so we are using them as the default ones.
 _LIBC_ARCH_COMMON_SRC_FILES += \
 	arch-x86/string/sse2-memcpy-slm.S \
 	arch-x86/string/sse2-memmove-slm.S \
-	arch-x86/string/sse2-bcopy-slm.S
+	arch-x86/string/sse2-bcopy-slm.S \
+	arch-x86/string/sse2-memset-slm.S \
+	arch-x86/string/sse2-bzero-slm.S
 endif
-
 
 ifeq ($(ARCH_X86_HAVE_SSSE3),true)
 _LIBC_ARCH_COMMON_SRC_FILES += \
@@ -62,8 +65,6 @@ endif
 
 ifeq ($(ARCH_X86_HAVE_SSE2),true)
 _LIBC_ARCH_COMMON_SRC_FILES += \
-	arch-x86/string/sse2-memset-atom.S \
-	arch-x86/string/sse2-bzero-atom.S \
 	arch-x86/string/sse2-memchr-atom.S \
 	arch-x86/string/sse2-memrchr-atom.S \
 	arch-x86/string/sse2-strchr-atom.S \
