@@ -33,7 +33,7 @@
 
 extern int  __openat(int, const char*, int, int);
 
-int openat(int fd, const char *pathname, int flags, ...)
+int __openat_real(int fd, const char *pathname, int flags, ...)
 {
     mode_t  mode = 0;
 
