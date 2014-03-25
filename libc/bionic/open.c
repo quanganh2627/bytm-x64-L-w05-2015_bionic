@@ -33,7 +33,7 @@
 
 extern int  __open(const char*, int, int);
 
-int open(const char *pathname, int flags, ...)
+int __open_real(const char *pathname, int flags, ...)
 {
     mode_t  mode = 0;
 
