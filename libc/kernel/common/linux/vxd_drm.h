@@ -258,9 +258,9 @@ enum drm_cmd_status {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
 struct drm_psb_getpageaddrs_arg {
- uint32_t handle;
- unsigned long *page_addrs;
+ uint64_t handle;
+ uint64_t page_addrs;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned long gtt_offset;
+ uint64_t gtt_offset;
 };
 #endif
