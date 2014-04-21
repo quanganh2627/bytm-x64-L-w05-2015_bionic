@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "cache.h"
-#undef __i686
 
 #ifndef USE_AS_MEMMOVE
 # define USE_AS_MEMMOVE 1
@@ -105,9 +104,8 @@ name:		\
 # define RETURN_END	POP (%ebx); ret
 # define RETURN		RETURN_END; CFI_PUSH (%ebx)
 # define JMPTBL(I, B)	I - B
-# undef __i686
 
-# define SETUP_PIC_REG(x)	call	__i686.get_pc_thunk.x
+# define SETUP_PIC_REG(x)	call	__x86.get_pc_thunk.x
 
 /* Load an entry in a jump table into EBX and branch to it.  TABLE is a
 	jump table with relative offsets.  INDEX is a register contains the

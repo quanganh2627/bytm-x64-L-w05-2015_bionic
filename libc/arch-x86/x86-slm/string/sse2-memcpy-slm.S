@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "cache.h"
-#undef __i686
 
 #ifndef MEMCPY
 # define MEMCPY	memcpy

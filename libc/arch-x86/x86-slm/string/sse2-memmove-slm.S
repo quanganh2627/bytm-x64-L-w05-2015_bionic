@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "cache.h"
+
 #ifndef MEMMOVE
 # define MEMMOVE	memmove
 #endif
