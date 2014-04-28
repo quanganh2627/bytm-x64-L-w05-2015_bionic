@@ -413,7 +413,7 @@ struct VssVp8encSequenceParameterBuffer {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  uint32_t ts_rate_decimator[3];
  uint32_t ts_periodicity;
- uint32_t ts_layer_id[32];
+ uint8_t ts_layer_id[32];
  struct VssProcPictureVP8 ref_frame_buffers[4];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
