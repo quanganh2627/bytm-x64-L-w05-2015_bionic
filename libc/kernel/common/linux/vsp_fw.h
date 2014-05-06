@@ -144,62 +144,67 @@ enum VssProcCommandType {
  VssProcPictureCommand = 0xFFF9,
  VspFencePictureParamCommand = 0xEBEC,
  VspSetContextCommand = 0xEBED,
- Vss_Sys_STATE_BUF_COMMAND
+ Vss_Sys_STATE_BUF_COMMAND = 0xEBEE,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VspFenceComposeCommand = 0xEBEF
 };
 #define VSP_CMD_QUEUE_SIZE (64)
 #define VSP_ACK_QUEUE_SIZE (64)
-struct vss_command_t {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct vss_command_t {
  unsigned int context;
  unsigned int type;
  unsigned int buffer;
- unsigned int size;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int size;
  unsigned int buffer_id;
  unsigned int irq;
  unsigned int reserved6;
- unsigned int reserved7;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int reserved7;
 };
 struct vss_response_t {
  unsigned int context;
- unsigned int type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int type;
  unsigned int buffer;
  unsigned int size;
  unsigned int vss_cc;
- unsigned int reserved5;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int reserved5;
  unsigned int reserved6;
  unsigned int reserved7;
 };
-#define VSP_COMMAND_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0}
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define VSP_COMMAND_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0}
 #define VSP_RESPONSE_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0}
 enum VssResponseType {
  VssIdleResponse = 0x80010000,
- VssErrorResponse = 0x80020000,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssErrorResponse = 0x80020000,
  VssEndOfSequenceResponse = 0x80030000,
  VssCommandBufferReadyResponse = 0x80040000,
  VssInputSurfaceReadyResponse = 0x80050000,
- VssOutputSurfaceReadyResponse = 0x80060000,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssOutputSurfaceReadyResponse = 0x80060000,
  VssVp8encSetSequenceParametersResponse = 150,
  VssVp8encEncodeFrameResponse
 };
-enum VssStatus {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+enum VssStatus {
  VssOK = 0x8001,
  VssInvalidCommandType = 0x8002,
  VssInvalidCommandArgument = 0x8003,
- VssInvalidProcPictureCommand = 0x8004,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssInvalidProcPictureCommand = 0x8004,
  VssInvalidDdrAddress = 0x8005,
  VssInvalidSequenceParameters_VP8 = 0x1,
  VssInvalidPictureParameters_VP8 = 0x2,
- VssInitFailure_VP8 = 0x5
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ VssContextMustBeDestroyed_VP8 = 0x3,
+ VssInitFailure_VP8 = 0x5,
+ VssCorruptFrame = 0x6,
+ VssCorruptFramecontinue_VP8 = 0x7
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
 enum FrcResponseType {
@@ -251,7 +256,7 @@ struct vsp_secure_boot_header {
  unsigned int boot_start_reg;
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define VSP_MULTI_APP_MAGIC_NR 0xb10b0004
+#define VSP_MULTI_APP_MAGIC_NR 0xb10b0005
 #define VSP_MULTI_APP_MAX_APPS 16
 #define VSP_MULTI_APP_MAX_CONTEXTS 32
 #define VSP_API_GENERIC_CONTEXT_ID (0xffffffff)
@@ -464,6 +469,86 @@ enum VssVp8encCommandType {
 enum VssGenCommandType {
  VssGenInitializeContext = 0xab01,
  VssGenDestroyContext = 0xab02
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+enum VssWiDi_ComposeCommandType {
+ VssWiDi_ComposeSetSequenceParametersCommand = 200,
+ VssWiDi_ComposeFrameCommand,
+ VssWiDi_ComposeEndOfSequenceCommand
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
+enum VssWiDi_ComposeResponseType {
+ VssWiDi_ComposeSetSequenceParametersResponse = 250,
+ VssWiDi_ComposeFrameResponse,
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
+enum VssWiDi_ColorFormat {
+ MonoChrome = 0,
+ YUV_4_2_0,
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ YUV_4_2_0_NV12,
+ YUV_4_2_2,
+ YUV_4_4_4
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct VssWiDi_ComposeSequenceParameterBuffer {
+ unsigned int R_Buffer;
+ unsigned int G_Buffer;
+ unsigned int B_Buffer;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int RGBA_Buffer;
+ unsigned int Y_Buffer;
+ unsigned int UV_Buffer;
+ unsigned int U_Buffer;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int V_Buffer;
+ unsigned int A_Buffer;
+ int ActualWidth;
+ int ActualHeight;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int ProcessedWidth;
+ int ProcessedHeight;
+ int TotalMBCount;
+ int Stride;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int Video_IN_xsize;
+ int Video_IN_ysize;
+ int Video_IN_stride;
+ int Video_IN_yuv_format;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int Video_IN_Y_Buffer;
+ unsigned int Video_IN_UV_Buffer;
+ unsigned int Video_IN_U_Buffer;
+ unsigned int Video_IN_V_Buffer;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int Video_OUT_xsize;
+ int Video_OUT_ysize;
+ int Video_OUT_stride;
+ int Video_OUT_yuv_format;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int Video_OUT_Y_Buffer;
+ unsigned int Video_OUT_UV_Buffer;
+ unsigned int Video_OUT_V_Buffer;
+ int Is_Blending_Enabled;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int ROI_width;
+ int ROI_height;
+ int ROI_x1;
+ int ROI_y1;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int ROI_x2;
+ int ROI_y2;
+ int alpha1;
+ int alpha2;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int Is_video_the_back_ground;
+ int Is_source_1_image_available;
+ int Is_source_2_image_available;
+ int Is_alpha_channel_available;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int Video_TotalMBCount;
+ int CSC_FormatSelect;
+ int CSC_InputFormatSelect;
 };
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #pragma pack()
