@@ -213,7 +213,7 @@ extern "C" int posix_memalign(void** memptr, size_t alignment, size_t size) {
 extern const MallocDebug __libc_malloc_default_dispatch;
 const MallocDebug __libc_malloc_default_dispatch __attribute__((aligned(32))) =
 {
-    dlmalloc, dlfree, dlcalloc, dlrealloc, dlmemalign, dlmalloc_usable_size,
+    dlmalloc, dlfree, dlcalloc, dlrealloc, dlmemalign, dlmalloc_usable_size, NULL, NULL, NULL
 };
 
 /* Selector of dispatch table to use for dispatching malloc calls. */
@@ -254,7 +254,7 @@ extern "C" size_t malloc_usable_size(const void* mem) {
 
 /* Table for dispatching malloc calls, depending on environment. */
 static MallocDebug gMallocUse __attribute__((aligned(32))) = {
-    dlmalloc, dlfree, dlcalloc, dlrealloc, dlmemalign, dlmalloc_usable_size
+    dlmalloc, dlfree, dlcalloc, dlrealloc, dlmemalign, dlmalloc_usable_size, NULL, NULL, NULL
 };
 
 extern const char* __progname;
@@ -314,6 +314,14 @@ static void InitMalloc(void* malloc_impl_handler, MallocDebug* table, const char
     InitMallocFunction<MallocDebugRealloc>(malloc_impl_handler, &table->realloc, prefix, "realloc");
     InitMallocFunction<MallocDebugMemalign>(malloc_impl_handler, &table->memalign, prefix, "memalign");
     InitMallocFunction<MallocDebugMallocUsableSize>(malloc_impl_handler, &table->malloc_usable_size, prefix, "malloc_usable_size");
+
+    /* The following three hooks can be NULL if not necessary */
+    InitMallocFunction<MallocDebugMallocPThreadAtForkPrep>(malloc_impl_handler,
+        &table->pthread_atfork_prepare, prefix, "pthread_atfork_prepare");
+    InitMallocFunction<MallocDebugMallocPThreadAtForkParent>(malloc_impl_handler,
+        &table->pthread_atfork_parent, prefix, "pthread_atfork_parent");
+    InitMallocFunction<MallocDebugMallocPThreadAtForkChild>(malloc_impl_handler,
+        &table->pthread_atfork_child, prefix, "pthread_atfork_child");
 }
 
 /* Initializes memory allocation framework once per process. */
@@ -482,6 +490,9 @@ static void malloc_init_impl() {
     } else {
         __libc_malloc_dispatch = &gMallocUse;
         libc_malloc_impl_handle = malloc_impl_handle;
+        pthread_atfork(gMallocUse.pthread_atfork_prepare,
+            gMallocUse.pthread_atfork_parent,
+            gMallocUse.pthread_atfork_child);
     }
 }
 
