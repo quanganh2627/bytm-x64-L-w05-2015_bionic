@@ -520,9 +520,11 @@ ifeq ($(TARGET_ARCH),arm)
 endif # !arm
 
 ifeq ($(TARGET_ARCH),x86)
-  libc_common_cflags += -DSOFTFLOAT \
-                        -fno-pic \
-                        -fno-pie
+  libc_common_cflags += -DSOFTFLOAT
+  ifneq ($(ENABLE_PIC_PIE),true)
+    libc_common_cflags += -fno-pic \
+                          -fno-pie
+  endif
   libc_crt_target_cflags := -m32
   libc_crt_target_ldflags := -melf_i386
   ifeq ($(ARCH_X86_HAVE_SSE2),true)
