@@ -432,3 +432,15 @@ extern "C" size_t leak_malloc_usable_size(const void* mem) {
     }
     return 0;
 }
+
+extern "C" void leak_pthread_atfork_prepare(void) {
+  pthread_mutex_lock(&gAllocationsMutex);
+}
+
+extern "C" void leak_pthread_atfork_parent(void) {
+  pthread_mutex_unlock(&gAllocationsMutex);
+}
+
+extern "C" void leak_pthread_atfork_child(void)  {
+  pthread_mutex_init(&gAllocationsMutex, NULL);
+}

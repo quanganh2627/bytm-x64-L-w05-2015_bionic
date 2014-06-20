@@ -545,6 +545,21 @@ static void ReportMemoryLeaks() {
   }
 }
 
+extern "C" void chk_pthread_atfork_prepare(void) {
+  pthread_mutex_lock(&lock);
+  pthread_mutex_lock(&backlog_lock);
+}
+
+extern "C" void chk_pthread_atfork_parent(void) {
+  pthread_mutex_unlock(&lock);
+  pthread_mutex_unlock(&backlog_lock);
+}
+
+extern "C" void chk_pthread_atfork_child(void)  {
+  pthread_mutex_init(&lock, NULL);
+  pthread_mutex_init(&backlog_lock, NULL);
+}
+
 extern "C" int malloc_debug_initialize() {
   backtrace_startup();
   return 0;

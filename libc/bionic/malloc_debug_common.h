@@ -77,6 +77,9 @@ typedef void* (*MallocDebugCalloc)(size_t, size_t);
 typedef void* (*MallocDebugRealloc)(void*, size_t);
 typedef void* (*MallocDebugMemalign)(size_t, size_t);
 typedef size_t (*MallocDebugMallocUsableSize)(const void*);
+typedef void (*MallocDebugMallocPThreadAtForkPrep)(void);
+typedef void (*MallocDebugMallocPThreadAtForkChild)(void);
+typedef void (*MallocDebugMallocPThreadAtForkParent)(void);
 struct MallocDebug {
   MallocDebugMalloc malloc;
   MallocDebugFree free;
@@ -84,6 +87,9 @@ struct MallocDebug {
   MallocDebugRealloc realloc;
   MallocDebugMemalign memalign;
   MallocDebugMallocUsableSize malloc_usable_size;
+  MallocDebugMallocPThreadAtForkPrep pthread_atfork_prepare;
+  MallocDebugMallocPThreadAtForkParent pthread_atfork_parent;
+  MallocDebugMallocPThreadAtForkChild pthread_atfork_child;
 };
 
 /* Malloc debugging initialization and finalization routines.
