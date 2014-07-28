@@ -19,9 +19,9 @@
 #ifndef __DCC_IOCTL_H__
 #define __DCC_IOCTL_H__
 #include <linux/ioctl.h>
-#define DCCDRV_VERSION_STR "1.1"
+#define DCCDRV_VERSION_STR "1.5"
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define DCCDRV_VERSION_INT (11)
+#define DCCDRV_VERSION_INT (15)
 #define DCC_DRIVER_NAME "dcc"
 #define DCC_DEVICE_NAME "/dev/"DCC_DRIVER_NAME
 #define DCC_TV_DISPLAY (1<<1)
@@ -59,183 +59,198 @@ enum {
  DCC_FMT_YUV422SP = 16,
  DCC_FMT_YUV420SP = 17,
 };
-#define DCC_UPDATE_MODE(_f_) (_f_ & DCC_UPDATE_MODE_MASK)
+#define DCC_UPDATE_MODE_GET(_f_) (_f_ & DCC_UPDATE_MODE_MASK)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_UPDATE_MODE_SET(_f_, _m_)   (_f_ = (_f_ & !DCC_UPDATE_MODE_MASK) | _m_)
 #define DCC_UPDATE_MODE_BITS (3)
-#define DCC_UPDATE_MODE_MASK ((1<<3)-1)
+#define DCC_UPDATE_MODE_MASK ((1<<DCC_UPDATE_MODE_BITS)-1)
 enum {
- DCC_UPDATE_ONESHOT_SYNC = 0,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ DCC_UPDATE_ONESHOT_SYNC = 0,
  DCC_UPDATE_ONESHOT_ASYNC,
  DCC_UPDATE_CONTINOUS,
 };
-#define DCC_UPDATE_NOBACKGROUND (1<<DCC_UPDATE_MODE_MASK)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_UPDATE_NOBG_MASK (1<<DCC_UPDATE_MODE_BITS)
+#define DCC_UPDATE_NOBG_GET(_f_) ((_f_>>DCC_UPDATE_MODE_BITS)&0x1)
+#define DCC_UPDATE_NOBG_SET(_f_, _v_)   (_f_ = (_f_ & !DCC_UPDATE_NOBG_MASK) | (_v_<<DCC_UPDATE_MODE_BITS))
 #define DCC_FMT_VIDEO_SPRITE 0xFF
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_FLAG_NONE 0
 #define DCC_FLAG_DRAW2DISP (1<<0)
 #define DCC_FLAG_COLORKEY (1<<1)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_BLEND_ALPHA_PLANE (1<<2)
-#define DCC_BLEND_ALPHA_PIXEL (1<<3)
-struct dcc_display_cfg_t {
- int width;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_BLEND_ALPHA_PIXEL (1<<3)
+struct dcc_bounds_t {
+ int x;
+ int y;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int w;
+ int h;
+};
+struct dcc_display_cfg_t {
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int width;
  int height;
  int xdpi;
  int ydpi;
- int refresh_rate;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int refresh_rate;
  unsigned int mem_base;
  unsigned int mem_size;
  unsigned int format;
- unsigned int hwid;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int hwid;
  unsigned int drvid;
  unsigned int overlay_nbr;
 };
-struct dcc_rq_t {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct dcc_rq_t {
  unsigned int fbwidth;
  unsigned int sphys;
  unsigned int sfmt;
- int sx;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int sx;
  int sy;
  int sw;
  int sh;
- unsigned int dphys;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int dphys;
  int dx;
  int dy;
  unsigned int dfmt;
- int dw;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int dw;
  int dh;
  int angle;
  int alpha;
- unsigned int flags;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int flags;
 };
 #define DCC_RQ_SRC(_rq_, _p_, _x_, _y_, _w_, _h_, _f_)   _rq_.sphys = _p_;   _rq_.sx = _x_;   _rq_.sy = _y_;   _rq_.sw = _w_;   _rq_.sh = _h_;   _rq_.sfmt = _f_;
 #define DCC_RQ_DST(_rq_, _fbw_, _p_, _x_, _y_, _w_, _h_, _f_)   _rq_.dphys = _p_;   _rq_.dx = _x_;   _rq_.dy = _y_;   _rq_.dw = _w_;   _rq_.dh = _h_;   _rq_.dfmt = _f_;   _rq_.fbwidth = _fbw_;
-#define DCC_RQ_DECL(_rq_)   struct dcc_rq_t _rq_;   DCC_RQ_SRC(_rq_, 0, 0, 0, 0, 0, 0)   DCC_RQ_DST(_rq_, 0, 0, 0, 0, 0, 0, 0)   _rq_.angle = 0;   _rq_.alpha = 0xFF;   _rq_.flags = 0;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_RQ_DECL(_rq_)   struct dcc_rq_t _rq_;   DCC_RQ_SRC(_rq_, 0, 0, 0, 0, 0, 0)   DCC_RQ_DST(_rq_, 0, 0, 0, 0, 0, 0, 0)   _rq_.angle = 0;   _rq_.alpha = 0xFF;   _rq_.flags = 0;
 struct dcc_rq_resize_t {
  unsigned int fbwidth;
  unsigned int sphys;
- unsigned int sfmt;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int sfmt;
  int sx;
  int sy;
  int sw;
- int sh;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int sh;
  int wx;
  int wy;
  int ww;
- int wh;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int wh;
  unsigned int dphys;
  int dx;
  int dy;
- unsigned int dfmt;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int dfmt;
  int dw;
  int dh;
  int angle;
- int alpha;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int alpha;
  unsigned int colorkey;
  unsigned int flags;
 };
-#define DCC_RQRESIZE_SRC(_rq_, _p_, _x_, _y_, _w_, _h_, _f_)   _rq_.sphys = _p_;   _rq_.sx = _x_;   _rq_.sy = _y_;   _rq_.sw = _w_;   _rq_.sh = _h_;   _rq_.sfmt = _f_;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_RQRESIZE_SRC(_rq_, _p_, _x_, _y_, _w_, _h_, _f_)   _rq_.sphys = _p_;   _rq_.sx = _x_;   _rq_.sy = _y_;   _rq_.sw = _w_;   _rq_.sh = _h_;   _rq_.sfmt = _f_;
 #define DCC_RQRESIZE_WIN(_rq_, _x_, _y_, _w_, _h_)   _rq_.wx = _x_;   _rq_.wy = _y_;   _rq_.ww = _w_;   _rq_.wh = _h_;
 #define DCC_RQRESIZE_DST(_rq_, _fbw_, _p_, _x_, _y_, _w_, _h_, _f_)   _rq_.dphys = _p_;   _rq_.dx = _x_;   _rq_.dy = _y_;   _rq_.dw = _w_;   _rq_.dh = _h_;   _rq_.dfmt = _f_;   _rq_.fbwidth = _fbw_;
 #define DCC_RQRESIZE_DECL(_rq_)   struct dcc_rq_resize_t _rq_;   DCC_RQRESIZE_SRC(_rq_, 0, 0, 0, 0, 0, 0)   DCC_RQRESIZE_WIN(_rq_, 0, 0, 0, 0)   DCC_RQRESIZE_DST(_rq_, 0, 0, 0, 0, 0, 0, 0)   _rq_.angle = 0;   _rq_.alpha = 0xFF;   _rq_.flags = 0;
-struct dcc_rect_t {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct dcc_rect_t {
  unsigned int phys;
  unsigned int fbwidth;
  unsigned int x;
- unsigned int y;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int y;
  unsigned int w;
  unsigned int h;
  unsigned int fmt;
- unsigned int color;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int color;
  unsigned int flags;
 };
-#define DCC_INIT_RECT(_r_, _p_, _fbw_, _x_, _y_, _w_, _h_, _f_, _c_,_g_)   _r_.phys = _p_;   _r_.fbwidth = _fbw_;   _r_.x = _x_;   _r_.y = _y_;   _r_.w = _w_;   _r_.h = _h_;   _r_.fmt = _f_;   _r_.color = _c_;   _r_.flags = _g_;
-#define DCC_SPRITE_NBR 4
+#define DCC_INIT_RECT(_r_, _p_, _fbw_, _x_, _y_, _w_, _h_, _f_, _c_, _g_)   _r_.phys = _p_;   _r_.fbwidth = _fbw_;   _r_.x = _x_;   _r_.y = _y_;   _r_.w = _w_;   _r_.h = _h_;   _r_.fmt = _f_;   _r_.color = _c_;   _r_.flags = _g_;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-struct dcc_sprite_t {
- unsigned int en;
- unsigned int phys;
- unsigned int id;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int x;
- unsigned int y;
- unsigned int w;
- unsigned int h;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int alpha;
- unsigned int global;
- unsigned int fmt;
- unsigned int chromakey;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-};
-#define DCC_SPRITE_DECLARE(_sp_)   struct dcc_sprite_t _sp_;
-#define DCC_SPRITE_INIT(_sp_, _e_, _i_, _o_,   _x_, _y_, _w_, _h_, _a_, _g_, _f_, _c_)   _sp_.en = _e_;   _sp_.id = _i_;   _sp_.phys = _o_;   _sp_.x = _x_;   _sp_.y = _y_;   _sp_.w = _w_;   _sp_.h = _h_;   _sp_.alpha = _a_;   _sp_.global = _g_;   _sp_.fmt = _f_;   _sp_.chromakey = _c_;
-#define DCC_SPRITE_OFF(_sp_) _sp_.en = 0
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-struct dcc_overlay_t {
- unsigned int phys;
- unsigned int key;
- unsigned int use_upd_alpha;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int fmt;
-};
-#define DCC_INIT_OVERLAY(_o_, _p_, _k_, _a_, _fmt_)   _o_.phys = _p_;   _o_.key = _k_;   _o_.fmt = _fmt_;   _o_.use_upd_alpha = _a_;
 struct dcc_point_t {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int phys;
  unsigned int fbwidth;
  unsigned int x;
- unsigned int y;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int y;
  unsigned int color;
 };
 #define DCC_POINT_INIT(_p_, _ph_, _fbw_, _x_, _y_, _c_)   _p_.phys = _ph_;   _p_.fbwidth = _fbw_;   _p_.x = _x_;   _p_.y = _y_;   _p_.color = _c_;
-struct dcc_switch_t {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
- unsigned int enable;
- unsigned int value;
+struct dcc_layer_back {
+ unsigned int phys;
+ unsigned int stride;
+ struct dcc_bounds_t src;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int fmt;
+ unsigned int alpha;
+ int fence_acquire;
+ int fence_release;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int fd;
+};
+#define dcc_layer_back_conf(_r_, _p_, _s_, _x_, _y_,   _w_, _h_, _f_, _a_, _c_, _g_)   _r_.phys = _p_;   _r_.stride = _s_;   _r_.src.x = _x_;   _r_.src.y = _y_;   _r_.src.w = _w_;   _r_.src.h = _h_;   _r_.fmt = _f_;   _r_.alpha = _a_;
+#define dcc_layer_back_disable(_b_) _b_.phys = 0
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct dcc_layer_ovl {
+ unsigned int phys;
+ struct dcc_bounds_t src;
+ struct dcc_bounds_t dst;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ unsigned int fmt;
+ unsigned int alpha;
+ int fence_acquire;
+ int fence_release;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int fd;
+ unsigned int global;
+ unsigned int chromakey;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define dcc_layer_ovl_conf(_o_, _p_,   _x_, _y_, _w_, _h_, _f_, _fd_, _a_, _g_, _c_)   _o_.phys = _p_;   _o_.dst.x = _x_;   _o_.dst.y = _y_;   _o_.dst.w = _w_;   _o_.dst.h = _h_;   _o_.fmt = _f_;   _o_.fence_acquire = _fd_;   _o_.alpha = _a_;   _o_.global = _g_;   _o_.chromakey = _c_;
+#define dcc_layer_ovl_disable(_o_) _o_.phys = 0
+#define DCC_OVERLAY_NUM 4
+struct dcc_update_layers {
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct dcc_layer_back back;
+ struct dcc_layer_ovl ovls[DCC_OVERLAY_NUM];
+ int fence_retire;
+ unsigned int flags;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 };
 #define DCC_IOC_MAGIC 'x'
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_IOW_POWER_ON _IOWR('x', 0, unsigned int)
 #define DCC_IOW_POWER_OFF _IOWR('x', 1, unsigned int)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_IOW_FILLRECTANGLE _IOWR('x', 2, struct dcc_rect_t)
 #define DCC_IOW_DRAWLINE _IOWR('x', 3, struct dcc_rect_t)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_IOW_BLIT _IOWR('x', 4, struct dcc_rq_t)
 #define DCC_IOW_ROTATE _IOWR('x', 5, struct dcc_rq_t)
-#define DCC_IOW_RESIZE _IOWR('x', 6, struct dcc_rq_resize_t)
-#define DCC_IOW_DRAWLINEREL _IOWR('x', 13, struct dcc_rect_t)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DCC_IOW_RESIZE _IOWR('x', 6, struct dcc_rq_resize_t)
+#define DCC_IOW_COMPOSE _IOWR('x', 7, struct dcc_update_layers)
+#define DCC_IOW_DRAWLINEREL _IOWR('x', 13, struct dcc_rect_t)
 #define DCC_IOW_MIRROR _IOWR('x', 14, struct dcc_rq_t)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_IOR_DISPLAY_INFO _IOWR('x', 15, struct dcc_display_cfg_t)
 #define DCC_IOW_SCROLLMOVE _IOWR('x', 16, struct dcc_rq_t)
-#define DCC_IOW_SPRITECONF _IOWR('x', 18, struct dcc_sprite_t)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define DCC_IOW_SETPIXEL _IOWR('x', 20, struct dcc_point_t)
 #define DCC_IOW_CONVERT _IOWR('x', 21, struct dcc_rq_t)
-#define DCC_IOW_UPDATE _IOWR('x', 22, struct dcc_rect_t)
-#define DCC_IOW_OVERLAYCONF _IOWR('x', 23, struct dcc_overlay_t)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
-#define DCC_IOW_UPDATE_OVERLAY _IOWR('x', 27, struct dcc_rect_t)
+#define DCC_IOW_UPDATE _IOWR('x', 22, struct dcc_rect_t)
 #define DCC_IOC_MAXNR (27)
 #endif
