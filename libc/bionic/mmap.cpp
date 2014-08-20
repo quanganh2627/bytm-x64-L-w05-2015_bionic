@@ -47,7 +47,6 @@ void* mmap64(void* addr, size_t size, int prot, int flags, int fd, off64_t offse
 
   bool is_private_anonymous = (flags & (MAP_PRIVATE | MAP_ANONYMOUS)) != 0;
   void* result = __mmap2(addr, size, prot, flags, fd, offset >> MMAP2_SHIFT);
-
   if (result != MAP_FAILED && kernel_has_MADV_MERGEABLE && is_private_anonymous) {
     ErrnoRestorer errno_restorer;
     int rc = madvise(result, size, MADV_MERGEABLE);
@@ -60,5 +59,5 @@ void* mmap64(void* addr, size_t size, int prot, int flags, int fd, off64_t offse
 }
 
 void* mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset) {
-  return mmap64(addr, size, prot, flags, fd, static_cast<off64_t>(offset));
+  return mmap64(addr, size, prot, flags, fd, static_cast<off64_t>((unsigned long)offset));
 }
