@@ -32,7 +32,7 @@
 #define	__swap32md(x) __statement({					\
 	uint32_t __swap32md_x = (x);					\
 									\
-	__asm ("bswap %0" : "+r" (__swap32md_x));			\
+	__asm ("bswap %0" : "=q" (__swap32md_x) : "0" (x));			\
 	__swap32md_x;							\
 })
 
@@ -45,7 +45,7 @@
 #define	__swap16md(x) __statement({					\
 	uint16_t __swap16md_x = (x);					\
 									\
-	__asm ("rorw $8, %w0" : "+r" (__swap16md_x));			\
+	__asm ("rorw $8, %w0" : "=q" (__swap16md_x) : "0" (x));		\
 	__swap16md_x;							\
 })
 
