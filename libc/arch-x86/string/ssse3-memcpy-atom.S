@@ -194,8 +194,8 @@ L(48bytesormore):
 	add	%edi, %ecx
 	sub	%edi, %eax
 
-#ifdef SHARED_CACHE_SIZE_HALF
-	cmp	$SHARED_CACHE_SIZE_HALF, %ecx
+#ifdef DATA_CACHE_SIZE_HALF
+	cmp	$DATA_CACHE_SIZE_HALF, %ecx
 #else
 # if (defined SHARED || defined __PIC__)
 	SETUP_PIC_REG(bx)
