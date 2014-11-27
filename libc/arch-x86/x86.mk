@@ -34,7 +34,7 @@ libc_bionic_src_files_x86 += \
     arch-x86/bionic/vfork.S \
 
 ## ARCH variant specific source files
-arch_variant_mk := $(LOCAL_PATH)/arch-x86/$(TARGET_ARCH_VARIANT)/$(TARGET_ARCH_VARIANT).mk
+arch_variant_mk := $(LOCAL_PATH)/arch-x86/$(subst x86-,,$(TARGET_ARCH_VARIANT))/$(subst x86-,,$(TARGET_ARCH_VARIANT)).mk
 ifeq ($(wildcard $(arch_variant_mk)),)
     arch_variant_mk := $(LOCAL_PATH)/arch-x86/generic/generic.mk
 endif
