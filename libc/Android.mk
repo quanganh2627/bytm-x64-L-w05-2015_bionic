@@ -520,6 +520,11 @@ endif # !arm
 
 ifeq ($(TARGET_ARCH),x86)
   libc_common_cflags += -DSOFTFLOAT
+  ifneq ($(BOARD_HAVE_SMALL_RAM), true)
+      libc_common_cflags += \
+		-fno-pic  \
+		-fno-pie
+  endif
   libc_crt_target_cflags :=
   ifeq ($(ARCH_X86_HAVE_SSE2),true)
       libc_crt_target_cflags += -DUSE_SSE2=1
